@@ -61,12 +61,34 @@
                 $t("settings.enabled")
               }}</template>
             </cv-toggle>
-              <!-- advanced options -->
+            <NsComboBox
+              v-model.trim="ldap_domain"
+              :autoFilter="true"
+              :autoHighlight="true"
+              :title="$t('settings.ldap_domain')"
+              :label="$t('settings.choose_ldap_domain')"
+              :options="ldap_domain_list"
+              :userInputLabel="core.$t('common.user_input_l')"
+              :acceptUserInput="false"
+              :showItemType="true"
+              :invalid-message="$t(error.ldap_domain)"
+              :disabled="loading.getConfiguration || loading.configureModule"
+              tooltipAlignment="start"
+              tooltipDirection="top"
+              class="mg-bottom"
+              ref="ldap_domain"
+            >
+              <template slot="tooltip">
+                {{
+                  $t("settings.choose_the_ldap_domain_to_authenticate_users")
+                }}
+              </template>
+            </NsComboBox>
+            <!-- advanced options -->
             <cv-accordion ref="accordion" class="maxwidth mg-bottom">
               <cv-accordion-item :open="toggleAccordion[0]">
                 <template slot="title">{{ $t("settings.advanced") }}</template>
-                <template slot="content">
-                </template>
+                <template slot="content"> </template>
               </cv-accordion-item>
             </cv-accordion>
             <cv-row v-if="error.configureModule">
@@ -125,6 +147,8 @@ export default {
       host: "",
       isLetsEncryptEnabled: false,
       isHttpToHttpsEnabled: true,
+      ldap_domain: "",
+      ldap_domain_list: [],
       loading: {
         getConfiguration: false,
         configureModule: false,
@@ -202,7 +226,14 @@ export default {
       this.host = config.host;
       this.isLetsEncryptEnabled = config.lets_encrypt;
       this.isHttpToHttpsEnabled = config.http2https;
-
+      // force to reload value after dom update
+      this.$nextTick(() => {
+        this.ldap_domain = config.ldap_domain;
+        if (this.ldap_domain == "") {
+          this.ldap_domain = "-";
+        }
+      });
+      this.ldap_domain_list = config.ldap_domain_list;
       this.loading.getConfiguration = false;
       this.focusElement("host");
     },
@@ -215,6 +246,14 @@ export default {
 
         if (isValidationOk) {
           this.focusElement("host");
+        }
+        isValidationOk = false;
+      }
+      if (!this.ldap_domain) {
+        this.error.ldap_domain = "common.required";
+
+        if (isValidationOk) {
+          this.focusElement("ldap_domain");
         }
         isValidationOk = false;
       }
@@ -271,6 +310,7 @@ export default {
             host: this.host,
             lets_encrypt: this.isLetsEncryptEnabled,
             http2https: this.isHttpToHttpsEnabled,
+            ldap_domain: this.ldap_domain == "-" ? "" : this.ldap_domain,
           },
           extra: {
             title: this.$t("settings.instance_configuration", {
