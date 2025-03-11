@@ -39,9 +39,20 @@ response = agent.tasks.run(
     agent_id=agent.resolve_agent_id('traefik@node'),
     action='set-route',
     data={
-        'instance': os.environ['MODULE_ID'],
+        'instance': 'auth-'+ os.environ['MODULE_ID'],
         'url':  'http://127.0.0.1:' + os.environ["TCP_PORT"],
-        'host': host,
+        'host': 'auth.'+host,
+        'http2https': h2hs,
+        'lets_encrypt': le
+    },
+)
+response = agent.tasks.run(
+    agent_id=agent.resolve_agent_id('traefik@node'),
+    action='set-route',
+    data={
+        'instance': 'manager-'+os.environ['MODULE_ID'],
+        'url':  'http://127.0.0.1:' + os.environ["TCP_PORT"],
+        'host': 'manager.'+host,
         'http2https': h2hs,
         'lets_encrypt': le
     },

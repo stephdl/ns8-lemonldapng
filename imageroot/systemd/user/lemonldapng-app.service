@@ -23,6 +23,7 @@ ExecStartPre=/usr/local/bin/runagent discover-ldap
 ExecStart=/usr/bin/podman run --conmon-pidfile %t/lemonldapng-app.pid \
     --cidfile %t/lemonldapng-app.ctr-id --cgroups=no-conmon \
     --pod-id-file %t/lemonldapng.pod-id --replace -d --name  lemonldapng-app \
+        --env PROXY_RANGE=10.0.0.0/8 \
         --env SSODOMAIN=${TRAEFIK_HOST} \
         --env PORTAL_HOSTNAME=auth.${TRAEFIK_HOST} \
         --env MANAGER_HOSTNAME=manager.${TRAEFIK_HOST} \
