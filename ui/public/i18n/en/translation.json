@@ -40,7 +40,8 @@
     "host_pattern": "Must be a valid fully qualified domain name",
     "host_format": "Must be a valid fully qualified domain name",
     "choose_the_ldap_domain_to_authenticate_users": "Choose the LDAP domain to authenticate users",
-    "choose_ldap_domain": "Choose LDAP domain"
+    "choose_ldap_domain": "Choose LDAP domain",
+    "ldap_domain": "LDAP domain"
   },
   "about": {
     "title": "About"
