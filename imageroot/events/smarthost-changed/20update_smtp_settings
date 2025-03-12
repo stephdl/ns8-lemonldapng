@@ -7,7 +7,12 @@
 import agent
 
 enabled = agent.read_envfile("smarthost.env").get("SMTP_ENABLED", "")
+SMTPAuthPass = agent.read_envfile("smarthost.env").get("SMTP_PASSWORD", "")
+SMTPAuthUser = agent.read_envfile("smarthost.env").get("SMTP_USERNAME", "")
+SMTPServer = agent.read_envfile("smarthost.env").get("SMTP_HOST", "")
+SMTPTLS = agent.read_envfile("smarthost.env").get("SMTP_ENCRYPTION", "")
+SMTPPort = agent.read_envfile("smarthost.env").get("SMTP_PORT", "")
 
 if enabled == "1":
-    agent.run_helper("podman", "exec", "lemonldapng-app", "/usr/share/lemonldap-ng/bin/lemonldap-ng-cli", "-yes" "1", "set", "SMTPAuthPass", "$SMTP_PASSWORD", "SMTPAuthUser", "$SMTP_USERNAME", "SMTPServer", "$SMTP_HOST", "SMTPTLS", "$SMTP_ENCRYPTION", "SMTPPort" "$SMTP_PORT")
+    agent.run_helper("podman", "exec", "lemonldapng-app", "/usr/share/lemonldap-ng/bin/lemonldap-ng-cli", "-yes", "1", "set", "SMTPAuthPass", SMTPAuthPass, "SMTPAuthUser", SMTPAuthUser, "SMTPServer", SMTPServer, "SMTPTLS", SMTPTLS, "SMTPPort" , SMTPPort)
 
