@@ -33,6 +33,7 @@ ExecStart=/usr/bin/podman run --conmon-pidfile %t/lemonldapng-app.pid \
         --env PRESERVEFILES="/etc/lemonldap-ng /var/lib/lemonldap-ng/conf /var/lib/lemonldap-ng/sessions /var/lib/lemonldap-ng/psessions" \
         --env LOGLEVEL=debug \
         --env FASTCGI_LISTEN_PORT=9000 \
+        --env SMTP_* \
         --env PORT=80 \
         --volume ./llng/etc:/etc/lemonldap-ng:Z \
         --volume ./llng/var-conf:/var/lib/lemonldap-ng/conf:Z \
