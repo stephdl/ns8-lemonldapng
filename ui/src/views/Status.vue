@@ -44,7 +44,9 @@
         <NsInfoCard
           light
           :title="$t('status.lemonldapng_webapp')"
-          :description="this.host ? 'manager.' + this.host : $t('status.not_configured')"
+          :description="
+            this.host ? 'manager.' + this.host : $t('status.not_configured')
+          "
           :icon="Wikis32"
           :loading="loading.getConfiguration"
           :isErrorShown="error.getConfiguration"
@@ -74,6 +76,34 @@
           </template>
         </NsInfoCard>
       </cv-column>
+      <template v-if="this.host">
+        <cv-column :md="4" :max="4">
+          <NsInfoCard
+            light
+            :title="$t('status.lemonldapng_webapp')"
+            :description="
+              this.host ? 'auth.' + this.host : $t('status.not_configured')
+            "
+            :icon="Wikis32"
+            :loading="loading.getConfiguration"
+            :isErrorShown="error.getConfiguration"
+            :errorTitle="$t('error.cannot_retrieve_configuration')"
+            :errorDescription="error.getConfiguration"
+            class="min-height-card"
+          >
+            <template slot="content">
+              <NsButton
+                kind="ghost"
+                :icon="Launch20"
+                :disabled="loading.getConfiguration"
+                @click="goToWebappAuth"
+              >
+                {{ $t("status.open_webapp") }}
+              </NsButton>
+            </template>
+          </NsInfoCard>
+        </cv-column>
+      </template>
       <cv-column :md="4" :max="4">
         <NsInfoCard
           light
@@ -386,6 +416,9 @@ export default {
   methods: {
     goToWebapp() {
       window.open(`https://manager.${this.host}`, "_blank");
+    },
+    goToWebappAuth() {
+      window.open(`https://auth.${this.host}`, "_blank");
     },
     async getConfiguration() {
       this.loading.getConfiguration = true;
