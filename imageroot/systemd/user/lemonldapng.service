@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2022 Nethesis S.r.l.
+# Copyright (C) 2025 Nethesis S.r.l.
 # SPDX-License-Identifier: GPL-3.0-or-later
 #
 
@@ -10,8 +10,8 @@
 
 [Unit]
 Description=Podman lemonldapng.service
-Requires=mariadb-app.service lemonldapng-app.service
-Before=mariadb-app.service lemonldapng-app.service
+Requires=lemonldapng-app.service
+Before=lemonldapng-app.service
 
 [Service]
 Environment=PODMAN_SYSTEMD_UNIT=%n
@@ -23,7 +23,14 @@ ExecStartPre=/usr/bin/podman pod create --infra-conmon-pidfile %t/lemonldapng.pi
     --pod-id-file %t/lemonldapng.pod-id \
     --name lemonldapng \
     --publish 127.0.0.1:${TCP_PORT}:80 \
-    --replace
+    --replace \
+    --add-host myportal.${TRAEFIK_HOST}:127.0.0.1 \
+    --add-host manager.${TRAEFIK_HOST}:127.0.0.1 \
+    --add-host reload.${TRAEFIK_HOST}:127.0.0.1 \
+    --add-host test1.${TRAEFIK_HOST}:127.0.0.1 \
+    --add-host test2.${TRAEFIK_HOST}:127.0.0.1 \
+    --network=slirp4netns:allow_host_loopback=true \
+    --add-host=accountprovider:10.0.2.2
 ExecStart=/usr/bin/podman pod start --pod-id-file %t/lemonldapng.pod-id
 ExecStop=/usr/bin/podman pod stop --ignore --pod-id-file %t/lemonldapng.pod-id -t 10
 ExecStopPost=/usr/bin/podman pod rm --ignore -f --pod-id-file %t/lemonldapng.pod-id
