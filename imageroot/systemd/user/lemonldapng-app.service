@@ -17,7 +17,7 @@ WorkingDirectory=%S/state
 Restart=always
 TimeoutStopSec=70
 ExecStartPre=/bin/rm -f %t/lemonldapng-app.pid %t/lemonldapng-app.ctr-id
-ExecStartPre=/bin/bash -c '/bin/mkdir -p ./llng/{etc,var-conf,var-sessions,var-psessions,theme,template,plugins,register,userdb,auth,captcha,menutab}'
+ExecStartPre=/bin/bash -c '/bin/mkdir -p ./llng/{theme,template,plugins,register,userdb,auth,captcha,menutab}'
 ExecStartPre=-runagent discover-smarthost
 ExecStartPre=/usr/local/bin/runagent discover-ldap
 ExecStart=/usr/bin/podman run --conmon-pidfile %t/lemonldapng-app.pid \
@@ -34,10 +34,10 @@ ExecStart=/usr/bin/podman run --conmon-pidfile %t/lemonldapng-app.pid \
         --env LOGLEVEL=debug \
         --env FASTCGI_LISTEN_PORT=9000 \
         --env PORT=80 \
-        --volume ./llng/etc:/etc/lemonldap-ng:Z \
-        --volume ./llng/var-conf:/var/lib/lemonldap-ng/conf:Z \
-        --volume ./llng/var-sessions:/var/lib/lemonldap-ng/sessions:Z \
-        --volume ./llng/var-psessions:/var/lib/lemonldap-ng/psessions:Z \
+        --volume etc:/etc/lemonldap-ng:Z \
+        --volume var-conf:/var/lib/lemonldap-ng/conf:Z \
+        --volume var-sessions:/var/lib/lemonldap-ng/sessions:Z \
+        --volume var-psessions:/var/lib/lemonldap-ng/psessions:Z \
         --volume ./llng/theme:/usr/share/lemonldap-ng/portal/htdocs/static/CustomTheme:Z \
         --volume ./llng/template:/usr/share/lemonldap-ng/portal/templates/CustomTheme:Z \
         --volume ./llng/plugins:/usr/share/perl5/Lemonldap/NG/Portal/Plugins/CustomPlugin:Z \
@@ -47,6 +47,7 @@ ExecStart=/usr/bin/podman run --conmon-pidfile %t/lemonldapng-app.pid \
         --volume ./llng/captcha:/usr/share/perl5/Lemonldap/NG/Portal/Captcha/CustomCaptcha:Z \
         --volume ./llng/menutab:/usr/share/perl5/Lemonldap/NG/Portal/MenuTab/CustomMenuTab:Z \
     ${LEMONLDAP_NG_IMAGE}
+ExecStartPost=/usr/local/bin/runagent update-smtp-settings
 ExecStop=/usr/bin/podman stop --ignore --cidfile %t/lemonldapng-app.ctr-id -t 10
 ExecReload=/usr/bin/podman kill -s HUP lemonldapng-app
 SyslogIdentifier=%u

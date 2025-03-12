@@ -25,8 +25,15 @@ with open(envfile + ".tmp", "w") as efp:
     print(f"SMTP_PORT={smtp_settings['port']}", file=efp)
     print(f"SMTP_USERNAME={smtp_settings['username']}", file=efp)
     print(f"SMTP_PASSWORD={smtp_settings['password']}", file=efp)
-    print(f"SMTP_ENCRYPTION={smtp_settings['encrypt_smtp']}", file=efp)
     print(f"SMTP_TLSVERIFY={'1' if smtp_settings['tls_verify'] else ''}", file=efp)
+    if smtp_settings['encrypt_smtp'] == 'starttls':
+        print("SMTP_ENCRYPTION=starttls", file=efp)
+    elif smtp_settings['encrypt_smtp'] == 'tls':
+        print("SMTP_ENCRYPTION=ssl", file=efp)
+    elif smtp_settings['encrypt_smtp'] == 'none':
+        print("SMTP_ENCRYPTION=", file=efp)
+    else:
+        print("SMTP_ENCRYPTION=", file=efp)
 
 # Commit changes by replacing the existing envfile:
 os.replace(envfile + ".tmp", envfile)
