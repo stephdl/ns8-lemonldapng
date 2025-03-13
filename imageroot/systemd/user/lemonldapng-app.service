@@ -31,7 +31,7 @@ ExecStart=/usr/bin/podman run --conmon-pidfile %t/lemonldapng-app.pid \
         --env TEST1_HOSTNAME=test1.${TRAEFIK_HOST} \
         --env TEST2_HOSTNAME=test2.${TRAEFIK_HOST} \
         --env PRESERVEFILES="/etc/lemonldap-ng /var/lib/lemonldap-ng/conf /var/lib/lemonldap-ng/sessions /var/lib/lemonldap-ng/psessions" \
-        --env LOGLEVEL=debug \
+        --env LOGLEVEL=error \
         --env FASTCGI_LISTEN_PORT=9000 \
         --env PORT=80 \
         --volume etc:/etc/lemonldap-ng:Z \
