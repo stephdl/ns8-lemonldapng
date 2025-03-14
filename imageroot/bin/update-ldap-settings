@@ -1,0 +1,27 @@
+#!/usr/bin/env python3
+
+#
+# Copyright (C) 2025 Nethesis S.r.l.
+# SPDX-License-Identifier: GPL-3.0-or-later
+#
+import agent
+import sys
+
+schema = agent.read_envfile("discovery_ldap.env ").get("LDAP_SCHEMA", "")
+ldap_base = agent.read_envfile("discovery_ldap.env ").get("LDAP_BASE", "")
+ldap_pass = agent.read_envfile("discovery_ldap.env ").get("LDAP_PASS", "")
+ldap_host = "10.0.2.2"
+ldap_user = agent.read_envfile("discovery_ldap.env ").get("LDAP_USER", "")
+ldap_port = agent.read_envfile("discovery_ldap.env ").get("LDAP_PORT", "")
+
+if ldap_pass == "invalid":
+    print ("LDAP settings are invalid", file=sys.stderr)
+    sys.exit(0)
+
+if schema == "rfc2307":
+    agent.run_helper("podman", "exec", "lemonldapng-app", "/usr/share/lemonldap-ng/bin/lemonldap-ng-cli", "-yes", "1", "set", "authentication" "LDAP", "passwordDB", "LDAP", "userDB", "Same", "registerDB", "Null", "ldapServer", "ldap://" + ldap_host+':'+ldap_port, "ldapVerify", "none", "ldapBase", ldap_base , "managerDn",  ldap_user, "managerPassword", ldap_pass, "ldapGroupBase", "ou=Groups,"+ ldap_base, "ldapGroupObjectClass", "posixGroup")
+    agent.run_helper("podman", "exec", "lemonldapng-app", "/usr/share/lemonldap-ng/bin/lemonldap-ng-cli", "-yes", "1", "addKey", "ldapExportedVars", "uid", "uid", "ldapExportedVars", "cn", "cn", "ldapExportedVars", "mail", "Email")
+
+#[root@ns1 ~]# perl test
+#dc=directory,dc=nhldap://127.0.0.1ou=Groups,dc=directory,dc=nh[root@ns1 ~]# 
+#dc=directory,dc=nhldap://127.0.0.1ou=Groups,dc=directory,dc=nhcn=ldapservice,dc=directory,dc=nhdc=directory,dc=nhfWMJaAk8v_uuoSzS[root@ns1 ~]# 
