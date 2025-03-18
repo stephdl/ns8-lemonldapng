@@ -8,12 +8,12 @@ import agent
 import sys
 import os
 
-schema = agent.read_envfile("discovery_ldap.env ").get("LDAP_SCHEMA", "")
-ldap_base = agent.read_envfile("discovery_ldap.env ").get("LDAP_BASE", "")
-ldap_pass = agent.read_envfile("discovery_ldap.env ").get("LDAP_PASS", "")
+schema = agent.read_envfile("discovery_ldap.env").get("LDAP_SCHEMA", "")
+ldap_base = agent.read_envfile("discovery_ldap.env").get("LDAP_BASE", "")
+ldap_pass = agent.read_envfile("discovery_ldap.env").get("LDAP_PASS", "")
 ldap_host = "10.0.2.2"
-ldap_user = agent.read_envfile("discovery_ldap.env ").get("LDAP_USER", "")
-ldap_port = agent.read_envfile("discovery_ldap.env ").get("LDAP_PORT", "")
+ldap_user = agent.read_envfile("discovery_ldap.env").get("LDAP_USER", "")
+ldap_port = agent.read_envfile("discovery_ldap.env").get("LDAP_PORT", "")
 
 if ldap_pass == "invalid":
     print ("LDAP settings are invalid", file=sys.stderr)
