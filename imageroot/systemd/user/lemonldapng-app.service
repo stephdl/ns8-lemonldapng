@@ -30,7 +30,7 @@ ExecStart=/usr/bin/podman run --conmon-pidfile %t/lemonldapng-app.pid \
         --env HANDLER_HOSTNAME=reload.${TRAEFIK_HOST} \
         --env TEST1_HOSTNAME=test1.${TRAEFIK_HOST} \
         --env TEST2_HOSTNAME=test2.${TRAEFIK_HOST} \
-        --env PRESERVEFILES="/etc/lemonldap-ng /var/lib/lemonldap-ng/conf /var/lib/lemonldap-ng/sessions /var/lib/lemonldap-ng/psessions" \
+        --env PRESERVEFILES="/etc/lemonldap-ng /var/lib/lemonldap-ng/conf /var/lib/lemonldap-ng/sessions /var/lib/lemonldap-ng/psessions /etc/nginx/sites-enabled" \
         --env LOGLEVEL=error \
         --env FASTCGI_LISTEN_PORT=9000 \
         --env PORT=80 \
@@ -38,6 +38,7 @@ ExecStart=/usr/bin/podman run --conmon-pidfile %t/lemonldapng-app.pid \
         --volume var-conf:/var/lib/lemonldap-ng/conf:Z \
         --volume var-sessions:/var/lib/lemonldap-ng/sessions:Z \
         --volume var-psessions:/var/lib/lemonldap-ng/psessions:Z \
+        --volume nginx:/etc/nginx/sites-enabled:Z \
         --volume ./llng/theme:/usr/share/lemonldap-ng/portal/htdocs/static/CustomTheme:Z \
         --volume ./llng/template:/usr/share/lemonldap-ng/portal/templates/CustomTheme:Z \
         --volume ./llng/plugins:/usr/share/perl5/Lemonldap/NG/Portal/Plugins/CustomPlugin:Z \
