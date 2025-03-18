@@ -5,6 +5,7 @@
 # SPDX-License-Identifier: GPL-3.0-or-later
 #
 import agent
+import subprocess
 
 enabled = agent.read_envfile("smarthost.env").get("SMTP_ENABLED", "")
 SMTPAuthPass = agent.read_envfile("smarthost.env").get("SMTP_PASSWORD", "")
@@ -13,7 +14,10 @@ SMTPServer = agent.read_envfile("smarthost.env").get("SMTP_HOST", "")
 SMTPTLS = agent.read_envfile("smarthost.env").get("SMTP_ENCRYPTION", "")
 SMTPPort = agent.read_envfile("smarthost.env").get("SMTP_PORT", "")
 
+
 if enabled == "1":
-    agent.run_helper("podman", "exec", "lemonldapng-app", "/usr/share/lemonldap-ng/bin/lemonldap-ng-cli", "-yes", "1", "set", "SMTPAuthPass", SMTPAuthPass, "SMTPAuthUser", SMTPAuthUser, "SMTPServer", SMTPServer, "SMTPTLS", SMTPTLS, "SMTPPort" , SMTPPort)
+    command = ["podman", "exec", "lemonldapng-app", "/usr/share/lemonldap-ng/bin/lemonldap-ng-cli", "-yes", "1", "set", "SMTPAuthPass", SMTPAuthPass, "SMTPAuthUser", SMTPAuthUser, "SMTPServer", SMTPServer, "SMTPTLS", SMTPTLS, "SMTPPort", SMTPPort]
 else:
-    agent.run_helper("podman", "exec", "lemonldapng-app", "/usr/share/lemonldap-ng/bin/lemonldap-ng-cli", "-yes", "1", "del", "SMTPAuthPass", "SMTPAuthUser", "SMTPServer", "SMTPTLS", "SMTPPort")
+    command = ["podman", "exec", "lemonldapng-app", "/usr/share/lemonldap-ng/bin/lemonldap-ng-cli", "-yes", "1", "del", "SMTPAuthPass", "SMTPAuthUser", "SMTPServer", "SMTPTLS", "SMTPPort"]
+
+subprocess.run(command, stderr=subprocess.DEVNULL, check=True)
