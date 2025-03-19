@@ -31,6 +31,3 @@ elif schema == "ad":
     agent.run_helper("podman", "exec", "lemonldapng-app", "/usr/share/lemonldap-ng/bin/lemonldap-ng-cli", "-yes", "1", "addKey", "ldapExportedVars", "uid", "sAMAccountName", "ldapExportedVars", "cn", "displayName", "ldapExportedVars", "mail", "mail")
     agent.run_helper("podman", "exec", "lemonldapng-app", "/usr/share/lemonldap-ng/bin/lemonldap-ng-cli", "-yes", "1", "delKey", "locationRules/", "manager."+os.environ['TRAEFIK_HOST'])
     agent.run_helper("podman", "exec", "lemonldapng-app", "/usr/share/lemonldap-ng/bin/lemonldap-ng-cli", "-yes", "1", "addKey", "locationRules/manager."+os.environ['TRAEFIK_HOST'], "default", '$uid eq administrator or inGroup("domain admins")')
-#[root@ns1 ~]# perl test
-#dc=directory,dc=nhldap://127.0.0.1ou=Groups,dc=directory,dc=nh[root@ns1 ~]# 
-#dc=directory,dc=nhldap://127.0.0.1ou=Groups,dc=directory,dc=nhcn=ldapservice,dc=directory,dc=nhdc=directory,dc=nhfWMJaAk8v_uuoSzS[root@ns1 ~]# 
