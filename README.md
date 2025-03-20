@@ -1,34 +1,5 @@
 # ns8-lemonldapng
 
-This is a template module for [NethServer 8](https://github.com/NethServer/ns8-core).
-To start a new module from it:
-
-1. Click on [Use this template](https://github.com/NethServer/ns8-lemonldapng/generate).
-   Name your repo with `ns8-` prefix (e.g. `ns8-mymodule`). 
-   Do not end your module name with a number, like ~~`ns8-baaad2`~~!
-
-1. Clone the repository, enter the cloned directory and
-   [configure your GIT identity](https://git-scm.com/book/en/v2/Getting-Started-First-Time-Git-Setup#_your_identity)
-
-1. Rename some references inside the repo:
-   ```
-   modulename=$(basename $(pwd) | sed 's/^ns8-//') &&
-   git mv imageroot/systemd/user/lemonldapng.service imageroot/systemd/user/${modulename}.service &&
-   git mv imageroot/systemd/user/lemonldapng-app.service imageroot/systemd/user/${modulename}-app.service && 
-   git mv tests/lemonldapng.robot tests/${modulename}.robot &&
-   sed -i "s/lemonldapng/${modulename}/g" $(find .github/ * -type f) &&
-   git commit -a -m "Repository initialization"
-   ```
-
-1. Edit this `README.md` file, by replacing this section with your module
-   description
-
-1. Adjust `.github/workflows` to your needs. `clean-registry.yml` might
-   need the proper list of image names to work correctly. Unused workflows
-   can be disabled from the GitHub Actions interface.
-
-1. Commit and push your local changes
-
 ## Install
 
 Instantiate the module with:
@@ -40,6 +11,46 @@ Output example:
 
     {"module_id": "lemonldapng1", "image_name": "lemonldapng", "image_url": "ghcr.io/nethserver/lemonldapng:latest"}
 
+## Documentation
+
+The complete documentation of the LemonLdap:NG software is available in the [official website](https://lemonldap-ng.org/documentation/latest/)
+
+## Applications
+
+How to integrate [Applications](https://lemonldap-ng.org/documentation/latest/applications.html)
+
+## auth and manager portal
+
+By default it exists some virtual hosts to show you configuration examples, you need to create some DNS entries pointed to the IP of your server, replace `domain.com` by the `host` value you have set
+
+- auth.domain.com
+- manager.domain.com
+- test1.domain.com
+- test2.domain.com
+- lemonldapng.domain.com
+
+The `auth` portal displays examples of applications accessible to both privileged and regular users. The `manager` portal, however, requires access rights granted to the domain admins group.
+
+## LDAP auto discovery
+
+The LDAP settings are automatically discovered upon service restart, enabling login with the `administrator` user and any member of the `domain admins` group as an administrator. All other LDAP users can access the portal.
+
+## Customisation
+
+The `./llng` folder within the state directory stores customizations such as themes and logos. This folder is included in the backup archive.
+
+```
+./llng/
+├── auth
+├── captcha
+├── menutab
+├── plugins
+├── register
+├── template
+├── theme
+└── userdb
+```
+
 ## Configure
 
 Let's assume that the mattermost instance is named `lemonldapng1`.
@@ -48,6 +59,7 @@ Launch `configure-module`, by setting the following parameters:
 - `host`: a fully qualified domain name for the application
 - `http2https`: enable or disable HTTP to HTTPS redirection (true/false)
 - `lets_encrypt`: enable or disable Let's Encrypt certificate (true/false)
+- `ldap_domain`: set the LDAP domain
 
 
 Example:
@@ -57,7 +69,8 @@ api-cli run configure-module --agent module/lemonldapng1 --data - <<EOF
 {
   "host": "lemonldapng.domain.com",
   "http2https": true,
-  "lets_encrypt": false
+  "lets_encrypt": false,
+  "ldap_domain": "domain.com"
 }
 EOF
 ```
