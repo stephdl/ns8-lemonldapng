@@ -16,8 +16,24 @@ SMTPPort = agent.read_envfile("smarthost.env").get("SMTP_PORT", "")
 
 
 if enabled == "1":
-    command = ["podman", "exec", "lemonldapng-app", "/usr/share/lemonldap-ng/bin/lemonldap-ng-cli", "-yes", "1", "set", "SMTPAuthPass", SMTPAuthPass, "SMTPAuthUser", SMTPAuthUser, "SMTPServer", SMTPServer, "SMTPTLS", SMTPTLS, "SMTPPort", SMTPPort]
+    command = [
+        "podman", "exec", "lemonldapng-app",
+        "/usr/share/lemonldap-ng/bin/lemonldap-ng-cli", "-yes", "1", "set",
+        "SMTPAuthPass", SMTPAuthPass,
+        "SMTPAuthUser", SMTPAuthUser,
+        "SMTPServer", SMTPServer,
+        "SMTPTLS", SMTPTLS,
+        "SMTPPort", SMTPPort
+        ]
 else:
-    command = ["podman", "exec", "lemonldapng-app", "/usr/share/lemonldap-ng/bin/lemonldap-ng-cli", "-yes", "1", "del", "SMTPAuthPass", "SMTPAuthUser", "SMTPServer", "SMTPTLS", "SMTPPort"]
+    command = [
+        "podman", "exec", "lemonldapng-app",
+        "/usr/share/lemonldap-ng/bin/lemonldap-ng-cli", "-yes", "1", "del",
+        "SMTPAuthPass",
+        "SMTPAuthUser",
+        "SMTPServer",
+        "SMTPTLS",
+        "SMTPPort"
+        ]
 
 subprocess.run(command, stderr=subprocess.DEVNULL, check=True)
