@@ -25,7 +25,7 @@ if schema == "rfc2307":
     command = [
         "podman", "exec", "lemonldapng-app", "/usr/share/lemonldap-ng/bin/lemonldap-ng-cli",
         "-yes", "1", "set", "authentication", "LDAP",
-        "passwordDB", "LDAP", ""
+        "passwordDB", "LDAP",
         "userDB", "LDAP",
         "registerDB", "Null",
         "ldapServer", "ldap://" + ldap_host+':'+ldap_port,
