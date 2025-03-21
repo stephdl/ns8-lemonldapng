@@ -22,34 +22,118 @@ if ldap_pass == "invalid":
 
 if schema == "rfc2307":
     print ("Setting LDAP settings for RFC2307 schema", file=sys.stderr)
-    command = ["podman", "exec", "lemonldapng-app", "/usr/share/lemonldap-ng/bin/lemonldap-ng-cli", "-yes", "1", "set", "authentication", "LDAP", "passwordDB", "LDAP", "userDB", "LDAP", "registerDB", "Null", "ldapServer", "ldap://" + ldap_host+':'+ldap_port, "ldapVerify", "none", "ldapBase", ldap_base , "managerDn",  ldap_user, "managerPassword", ldap_pass]
+    command = [
+        "podman", "exec", "lemonldapng-app", "/usr/share/lemonldap-ng/bin/lemonldap-ng-cli",
+        "-yes", "1", "set", "authentication", "LDAP",
+        "passwordDB", "LDAP",
+        "userDB", "LDAP",
+        "registerDB", "Null",
+        "ldapServer", "ldap://" + ldap_host+':'+ldap_port,
+        "ldapVerify", "none",
+        "ldapBase", ldap_base ,
+        "managerDn",  ldap_user,
+        "managerPassword", ldap_pass
+        ]
     subprocess.run(command, stderr=subprocess.DEVNULL, check=True)
 
-    command = ["podman", "exec", "lemonldapng-app", "/usr/share/lemonldap-ng/bin/lemonldap-ng-cli", "-yes", "1", "set", "ldapGroupBase", "ou=Groups,"+ ldap_base, "ldapGroupObjectClass", "posixGroup", "groupLDAPFilter", "(objectClass=posixGroup)","ldapGroupAttributeName", "memberUid", "ldapGroupAttributeNameUser", "uid", "ldapGroupAttributeNameSearch", "cn", "ldapGroupRecursive", "1", "ldapGroupAttributeNameGroup", "dn"]
+    command = [
+        "podman", "exec", "lemonldapng-app",
+        "/usr/share/lemonldap-ng/bin/lemonldap-ng-cli", "-yes", "1",
+        "set", "ldapGroupBase", "ou=Groups,"+ ldap_base,
+        "ldapGroupObjectClass", "posixGroup",
+        "groupLDAPFilter", "(objectClass=posixGroup)",
+        "ldapGroupAttributeName", "memberUid",
+        "ldapGroupAttributeNameUser", "uid",
+        "ldapGroupAttributeNameSearch", "cn",
+        "ldapGroupRecursive", "1",
+        "ldapGroupAttributeNameGroup", "dn"
+        ]
     subprocess.run(command, stderr=subprocess.DEVNULL, check=True)
 
-    command = ["podman", "exec", "lemonldapng-app", "/usr/share/lemonldap-ng/bin/lemonldap-ng-cli", "-yes", "1", "addKey", "ldapExportedVars", "uid", "uid", "ldapExportedVars", "cn", "cn", "ldapExportedVars", "mail", "mail"]
+    command = [
+        "podman", "exec", "lemonldapng-app",
+        "/usr/share/lemonldap-ng/bin/lemonldap-ng-cli", "-yes", "1","addKey",
+        "ldapExportedVars", "givenName", "givenName",
+        "ldapExportedVars", "homeDirectory", "homeDirectory",
+        "ldapExportedVars", "gidNumber", "gidNumber",
+        "ldapExportedVars", "mail", "mail",
+        "ldapExportedVars", "cn", "cn",
+        "ldapExportedVars", "sn", "sn",
+        "ldapExportedVars", "uid", "uid",
+        "ldapExportedVars", "group", "memberUid"
+        ]
     subprocess.run(command, stderr=subprocess.DEVNULL, check=True)
 
-    command = ["podman", "exec", "lemonldapng-app", "/usr/share/lemonldap-ng/bin/lemonldap-ng-cli", "-yes", "1", "delKey", "locationRules/", "manager."+os.environ['TRAEFIK_HOST']]
+    command = [
+        "podman", "exec", "lemonldapng-app",
+        "/usr/share/lemonldap-ng/bin/lemonldap-ng-cli", "-yes", "1", "delKey",
+        "locationRules/", "manager."+os.environ['TRAEFIK_HOST']
+        ]
     subprocess.run(command, stderr=subprocess.DEVNULL, check=True)
 
-    command = ["podman", "exec", "lemonldapng-app", "/usr/share/lemonldap-ng/bin/lemonldap-ng-cli", "-yes", "1", "addKey", "locationRules/manager."+os.environ['TRAEFIK_HOST'], "default", '$uid eq administrator or inGroup("domain admins")']
+    command = [
+        "podman", "exec", "lemonldapng-app",
+        "/usr/share/lemonldap-ng/bin/lemonldap-ng-cli", "-yes", "1", "addKey",
+        "locationRules/manager."+os.environ['TRAEFIK_HOST'], "default", '$uid eq administrator or inGroup("domain admins")'
+        ]
     subprocess.run(command, stderr=subprocess.DEVNULL, check=True)
 
 elif schema == "ad":
     print ("Setting LDAP settings for AD schema", file=sys.stderr)
-    command = ["podman", "exec", "lemonldapng-app", "/usr/share/lemonldap-ng/bin/lemonldap-ng-cli", "-yes", "1", "set", "authentication", "AD", "passwordDB", "AD", "userDB", "AD", "registerDB", "Null", "ldapServer", "ldap://" + ldap_host+':'+ldap_port, "ldapVerify", "none", "ldapBase", ldap_base , "managerDn",  ldap_user, "managerPassword", ldap_pass]
+    command = [
+        "podman", "exec", "lemonldapng-app",
+        "/usr/share/lemonldap-ng/bin/lemonldap-ng-cli", "-yes", "1", "set",
+        "authentication", "AD",
+        "passwordDB", "AD",
+        "userDB", "AD",
+        "registerDB", "Null",
+        "ldapServer", "ldap://" + ldap_host+':'+ldap_port,
+        "ldapVerify", "none", 
+        "ldapBase", ldap_base ,
+        "managerDn",  ldap_user, 
+        "managerPassword", ldap_pass
+        ]
     subprocess.run(command, stderr=subprocess.DEVNULL, check=True)
 
-    command = ["podman", "exec", "lemonldapng-app", "/usr/share/lemonldap-ng/bin/lemonldap-ng-cli", "-yes", "1", "set", "ldapGroupBase", ldap_base, "ldapGroupObjectClass", "group", "groupLDAPFilter", "(objectClass=group)","ldapGroupAttributeName", "member", "ldapGroupAttributeNameUser", "dn", "ldapGroupAttributeNameSearch", "cn", "ldapGroupRecursive", "1", "ldapGroupDecodeSearchedValue", "1", "ldapGroupAttributeNameGroup", "dn"]
+    command = [
+        "podman", "exec", "lemonldapng-app",
+        "/usr/share/lemonldap-ng/bin/lemonldap-ng-cli", "-yes", "1", "set",
+        "ldapGroupBase", ldap_base,
+        "ldapGroupObjectClass", "group",
+        "groupLDAPFilter", "(objectClass=group)",
+        "ldapGroupAttributeName", "member",
+        "ldapGroupAttributeNameUser", "dn",
+        "ldapGroupAttributeNameSearch", "cn",
+        "ldapGroupRecursive", "1",
+        "ldapGroupDecodeSearchedValue", "1",
+        "ldapGroupAttributeNameGroup", "dn"
+        ]
     subprocess.run(command, stderr=subprocess.DEVNULL, check=True)
 
-    command = ["podman", "exec", "lemonldapng-app", "/usr/share/lemonldap-ng/bin/lemonldap-ng-cli", "-yes", "1", "addKey", "ldapExportedVars", "uid", "sAMAccountName", "ldapExportedVars", "cn", "displayName", "ldapExportedVars", "mail", "mail"]
+    command = [
+        "podman", "exec", "lemonldapng-app",
+        "/usr/share/lemonldap-ng/bin/lemonldap-ng-cli", "-yes", "1", "addKey",
+        "ldapExportedVars", "homeDirectory", "homeDirectory",
+        "ldapExportedVars", "group", "group",
+        "ldapExportedVars", "mail", "mail",
+        "ldapExportedVars", "cn", "cn",
+        "ldapExportedVars", "sn", "sn",
+        "ldapExportedVars", "givenName", "givenName",
+        "ldapExportedVars", "displayName", "displayName",
+        "ldapExportedVars", "uid", "sAMAccountName"
+        ]
     subprocess.run(command, stderr=subprocess.DEVNULL, check=True)
 
-    command = ["podman", "exec", "lemonldapng-app", "/usr/share/lemonldap-ng/bin/lemonldap-ng-cli", "-yes", "1", "delKey", "locationRules/", "manager."+os.environ['TRAEFIK_HOST']]
+    command = [
+        "podman", "exec", "lemonldapng-app",
+        "/usr/share/lemonldap-ng/bin/lemonldap-ng-cli", "-yes", "1", "delKey",
+        "locationRules/", "manager."+os.environ['TRAEFIK_HOST']
+        ]
     subprocess.run(command, stderr=subprocess.DEVNULL, check=True)
 
-    command = ["podman", "exec", "lemonldapng-app", "/usr/share/lemonldap-ng/bin/lemonldap-ng-cli", "-yes", "1", "addKey", "locationRules/manager."+os.environ['TRAEFIK_HOST'], "default", '$uid eq administrator or inGroup("domain admins")']
+    command = [
+        "podman", "exec", "lemonldapng-app",
+        "/usr/share/lemonldap-ng/bin/lemonldap-ng-cli", "-yes", "1", "addKey",
+        "locationRules/manager."+os.environ['TRAEFIK_HOST'], "default", '$uid eq administrator or inGroup("domain admins")'
+        ]
     subprocess.run(command, stderr=subprocess.DEVNULL, check=True)
