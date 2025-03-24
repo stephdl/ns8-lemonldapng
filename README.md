@@ -41,6 +41,7 @@ The `./llng` folder within the state directory stores customizations such as the
 
 ```
 ./llng/
+├── apps
 ├── auth
 ├── captcha
 ├── menutab
