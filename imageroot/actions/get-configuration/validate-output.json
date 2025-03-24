@@ -7,14 +7,18 @@
         {
             "host": "lemonldapng.domain.org",
             "http2https": true,
-            "lets_encrypt": true
+            "lets_encrypt": true,
+            "ldap_domain": "domain.org",
+            "configured": true
         }
     ],
     "type": "object",
     "required": [
         "host",
         "http2https",
-        "lets_encrypt"
+        "lets_encrypt",
+        "ldap_domain",
+        "configured"
     ],
     "properties": {
         "host": {
@@ -31,6 +35,16 @@
             "type": "boolean",
             "title": "HTTP to HTTPS redirection",
             "description": "Redirect all the HTTP requests to HTTPS"
+        },
+        "ldap_domain": {
+            "type": "string",
+            "title": "LDAP domain",
+            "description": "Choose the LDAP domain to authenticate users"
+        },
+        "configured": {
+            "type": "boolean",
+            "title": "Configured",
+            "description": "True if the application is already configured"
         }
     }
 }
