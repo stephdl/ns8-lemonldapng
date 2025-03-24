@@ -58,11 +58,11 @@ This is the available folders
 ```
 
 To get persistent settings, you can find some more volumes
-`etc` mounted to `/etc/lemonldap-ng`
-`var-conf` mounted to `/var/lib/lemonldap-ng/conf`
-`var-psessions` mounted to `/var/lib/lemonldap-ng/sessions`
-`var-sessions` mounted to `/var/lib/lemonldap-ng/psessions`
-`nginx` mounted to `/etc/nginx/sites-enabled`
+- `etc` mounted to `/etc/lemonldap-ng`
+- `var-conf` mounted to `/var/lib/lemonldap-ng/conf`
+- `var-psessions` mounted to `/var/lib/lemonldap-ng/sessions`
+- `var-sessions` mounted to `/var/lib/lemonldap-ng/psessions`
+- `nginx` mounted to `/etc/nginx/sites-enabled`
 
 In order to acces to these volumes
 ```
