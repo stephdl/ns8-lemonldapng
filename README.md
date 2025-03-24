@@ -40,6 +40,11 @@ The LDAP settings are automatically discovered upon service restart, enabling lo
 The `./llng` folder within the state directory stores customizations such as themes and logos. This folder is included in the backup archive.
 
 ```
+runagent -m lemonldapng1
+cd llng
+```
+This is the available folders
+```
 ./llng/
 ├── apps
 ├── auth
@@ -50,6 +55,20 @@ The `./llng` folder within the state directory stores customizations such as the
 ├── template
 ├── theme
 └── userdb
+```
+
+To get persistent settings, you can find some more volumes
+`etc` mounted to `/etc/lemonldap-ng`
+`var-conf` mounted to `/var/lib/lemonldap-ng/conf`
+`var-psessions` mounted to `/var/lib/lemonldap-ng/sessions`
+`var-sessions` mounted to `/var/lib/lemonldap-ng/psessions`
+`nginx` mounted to `/etc/nginx/sites-enabled`
+
+In order to acces to these volumes
+```
+runagent -m lemonldapng1
+podman exec -ti lemonldapng-app bash
+cd /etc/lemonldap-ng
 ```
 
 ## Configure
