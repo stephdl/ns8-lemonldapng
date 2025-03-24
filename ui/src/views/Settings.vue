@@ -23,16 +23,23 @@
       <cv-column>
         <cv-tile light>
           <cv-form @submit.prevent="configureModule">
-            <cv-text-input
+            <NsTextInput
               :label="$t('settings.lemonldapng_fqdn')"
               placeholder="lemonldapng.example.org"
               v-model.trim="host"
               class="mg-bottom"
               :invalid-message="$t(error.host)"
-              :disabled="loading.getConfiguration || loading.configureModule"
+              :disabled="
+                loading.getConfiguration ||
+                loading.configureModule ||
+                configured
+              "
               ref="host"
             >
-            </cv-text-input>
+              <template #tooltip>{{
+                $t("settings.lemonldapng_fqdn_tooltip")
+              }}</template>
+            </NsTextInput>
             <cv-toggle
               value="letsEncrypt"
               :label="$t('settings.lets_encrypt')"
@@ -145,6 +152,7 @@ export default {
       },
       urlCheckInterval: null,
       host: "",
+      configured: false,
       isLetsEncryptEnabled: false,
       isHttpToHttpsEnabled: true,
       ldap_domain: "",
@@ -226,6 +234,7 @@ export default {
       this.host = config.host;
       this.isLetsEncryptEnabled = config.lets_encrypt;
       this.isHttpToHttpsEnabled = config.http2https;
+      this.configured = config.configured;
       // force to reload value after dom update
       this.$nextTick(() => {
         this.ldap_domain = config.ldap_domain;
