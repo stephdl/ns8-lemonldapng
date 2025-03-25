@@ -46,30 +46,6 @@ response = agent.tasks.run(
         'instance': 'manager-' + os.environ['MODULE_ID']
     },
 )
-# Remove traefik route
-response = agent.tasks.run(
-    agent_id=default_traefik_id,
-    action='delete-route',
-    data={
-        'instance': 'reload-' + os.environ['MODULE_ID']
-    },
-)
-# Remove traefik route
-response = agent.tasks.run(
-    agent_id=default_traefik_id,
-    action='delete-route',
-    data={
-        'instance': 'test1-' + os.environ['MODULE_ID']
-    },
-)
-# Remove traefik route
-response = agent.tasks.run(
-    agent_id=default_traefik_id,
-    action='delete-route',
-    data={
-        'instance': 'test2-' + os.environ['MODULE_ID']
-    },
-)
 
 # Check if traefik configuration has been successfull
 agent.assert_exp(response['exit_code'] == 0)
