@@ -1,57 +1,76 @@
 {
-    "error": {
-        "403": "Eragiketa baimendu gabea",
-        "cannot_retrieve_installed_modules": "Ezin dira instalatutako moduluak berreskuratu",
-        "401": "Autentifikazio baliogabea",
-        "cannot_retrieve_module_info": "Ezin da moduluaren informazioa berreskuratu",
-        "generic_error": "Zerbait okertu da",
-        "error": "Errorea",
-        "network_timeout": "Sarearen denbora-muga",
-        "404": "Baliabidea ez da aurkitu",
-        "network_error": "Sare-errorea",
-        "validation_error": "Balioztatze-errorea"
-    },
-    "settings": {
-        "test_field": "Proba-eremua",
-        "configure_instance": "{instance} konfiguratu",
-        "save": "Gorde",
-        "title": "Ezarpenak"
-    },
-    "common": {
-        "required": "Beharrezkoa",
-        "work_in_progress": "Lanak martxan",
-        "processing": "Prozesatzen..."
-    },
-    "status": {
-        "created": "Sortuta",
-        "size": "Tamaina",
-        "name": "Izena",
-        "no_images": "Irudirik ez",
-        "app_volumes": "Aplikazioaren bolumena | Aplikazioen bolumenak",
-        "services": "Zerbitzua | Zerbitzuak",
-        "app_images": "Aplikazioaren irudia | Aplikazioen irudiak",
-        "no_services": "Zerbitzurik ez",
-        "app_instance": "Aplikazioaren instantzia",
-        "mount": "Muntatu",
-        "title": "Egoera",
-        "installation_node": "Instalazio-nodoa",
-        "node": "Nodoa",
-        "no_volumes": "Bolumenik ez"
-    },
-    "about": {
-        "title": "Honi buruz"
-    },
-    "action": {
-        "list-backup-repositories": "Babeskopien biltegiak ikusi",
-        "get-module-info": "Moduluaren informazioa berreskuratu",
-        "list-installed-modules": "Instalatutako moduluak ikusi",
-        "list-backups": "Babeskopiak ikusi",
-        "get-status": "Egoera berreskuratu",
-        "configure-module": "Modulua konfiguratu",
-        "get-configuration": "Konfigurazioa berreskuratu",
-        "get-name": "Izena berreskuratu"
-    },
-    "task": {
-        "cannot_create_task": "Ezin da zeregina {action} sortu"
-    }
+  "common": {
+    "required": "Beharrezkoa",
+    "work_in_progress": "Prozesuan",
+    "processing": "Prozesatzen..."
+  },
+  "status": {
+    "title": "Egoera",
+    "app_instance": "Aplikazioaren instanta",
+    "services": "Zerbitzu | Zerbitzuak",
+    "app_images": "Aplikazioaren irudia | Aplikazioaren irudiak",
+    "app_volumes": "Aplikazioaren bolumena | Aplikazioaren bolumenak",
+    "installation_node": "Instalazio nodoa",
+    "node": "Nodoa",
+    "name": "Izena",
+    "size": "Tamaina",
+    "created": "Sortua",
+    "mount": "Muntatzea",
+    "no_services": "Ez dago zerbitzurik",
+    "no_images": "Ez dago irudirik",
+    "no_volumes": "Ez dago bolumenik",
+    "lemonldapng_webapp": "lemonldapng web aplikazioa",
+    "not_configured": "Ez dago konfiguraturik",
+    "open_webapp": "Ireki lemonldapng",
+    "configure": "Konfiguratu"
+  },
+  "settings": {
+    "title": "Ezarpenak",
+    "configure_instance": "Konfiguratu {instance}",
+    "save": "Gorde",
+    "lemonldapng_fqdn": "lemonldapng host izena (FQDN)",
+    "lets_encrypt": "Eskatu LE Ziurtagiria",
+    "http_to_https": "Forzatu HTTPS",
+    "enabled": "Aktibatuta",
+    "disabled": "Desaktibatuta",
+    "advanced": "Aurreratua",
+    "configuring": "Konfiguratzen",
+    "instance_configuration": "Konfiguratu lemonldapng",
+    "domain_already_used_in_traefik": "Domena Traefiken dagoeneko erabiltzen da",
+    "host_pattern": "Izena izan behar du domeinu oso baliodun bat",
+    "host_format": "Izena izan behar du domeinu oso baliodun bat",
+    "choose_the_ldap_domain_to_authenticate_users": "Hautatu LDAP domeinua erabiltzaileak autentifikatzeko",
+    "choose_ldap_domain": "Hautatu LDAP domeinua",
+    "ldap_domain": "LDAP domeinua",
+    "lemonldapng_fqdn_tooltip": "lemonldapng web aplikazioaren host izena (FQDN), behin bakarrik ezar daiteke, aldatu nahi baduzu, erabili lemonldapng UI"
+  },
+  "about": {
+    "title": "Buruz"
+  },
+  "task": {
+    "cannot_create_task": "Ez da {action} zereginik sortu ahal izan"
+  },
+  "action": {
+    "get-status": "Egoera lortu",
+    "get-configuration": "Konfigurazioa lortu",
+    "configure-module": "Modulua konfiguratu",
+    "get-module-info": "Moduluaren informazioa lortu",
+    "get-name": "Izena lortu",
+    "list-backup-repositories": "Segurtasun kopien biltegien zerrenda",
+    "list-backups": "Segurtasun kopien zerrenda",
+    "list-installed-modules": "Instalatutako moduluen zerrenda"
+  },
+  "error": {
+    "error": "Errorea",
+    "generic_error": "Zerbait gaizki joan da",
+    "validation_error": "Balidazio errorea",
+    "network_error": "Sare errorea",
+    "network_timeout": "Sareko denbora-muga gaindituta",
+    "401": "Autentifikazio baliogabea",
+    "403": "Eragiketa ez da baimenduta",
+    "404": "Erreserba ez da aurkitu",
+    "cannot_retrieve_module_info": "Ez da moduluko informazioa eskuratu ahal izan",
+    "cannot_retrieve_installed_modules": "Ez da instalatutako modulurik eskuratu ahal izan",
+    "cannot_retrieve_configuration": "Ez da konfiguraziorik eskuratu ahal izan"
+  }
 }
