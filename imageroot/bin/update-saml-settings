@@ -1,0 +1,93 @@
+#!/usr/bin/env python3
+
+#
+# Copyright (C) 2025 Nethesis S.r.l.
+# SPDX-License-Identifier: GPL-3.0-or-later
+#
+import sys
+import os
+import subprocess
+
+# does saml is enabled in the UI (default is disabled)
+saml_status = os.getenv("SAML_STATUS", "0")
+# read from the UI the entityID
+entity_id = os.getenv("SAML_ENTITY_ID", "")
+# read from the UI the identity provider
+identity_provider = os.getenv("SAML_IDENTITY_PROVIDER", "")
+# read from the UI the Assertion Consumer Service
+assertion_consumer_service = os.getenv("SAML_ASSERTION_CONSUMER_SERVICE", "")
+# read from the UI enable SAML Single Logout (SLO)
+saml_slo = os.getenv("SAML_SLO_STATUS", "0")
+
+
+# SAML settings is disabled
+if saml_status == "0":
+    print("SAML is disabled, skipping SAML settings", file=sys.stderr)
+    command = [
+        "podman", "exec", "lemonldapng-app", "/usr/share/lemonldap-ng/bin/lemonldap-ng-cli",
+        "-yes", "1", "set", "cda", "0"
+        ]
+    subprocess.run(command, stderr=subprocess.DEVNULL, check=True)
+
+    # Disable the SAML Protocol
+    command = [
+        "podman", "exec", "lemonldapng-app", "/usr/share/lemonldap-ng/bin/lemonldap-ng-cli",
+        "-yes", "1", "set", "saml.enabled", "false"
+        ]
+    subprocess.run(command, stderr=subprocess.DEVNULL, check=True)
+
+else:
+    print("SAML is enabled, setting SAML settings", file=sys.stderr)
+    command = [
+        "podman", "exec", "lemonldapng-app", "/usr/share/lemonldap-ng/bin/lemonldap-ng-cli",
+        "-yes", "1", "set", "cda", "1"
+        ]
+    subprocess.run(command, stderr=subprocess.DEVNULL, check=True)
+
+    # Enable the SAML Protocol
+    print("Enabling SAML settings", file=sys.stderr)
+    command = [
+        "podman", "exec", "lemonldapng-app", "/usr/share/lemonldap-ng/bin/lemonldap-ng-cli",
+        "-yes", "1", "set", "saml.enabled", "true"
+        ]
+    subprocess.run(command, stderr=subprocess.DEVNULL, check=True)
+
+    # Define the SAML Entity ID
+    print("Setting SAML Entity ID", file=sys.stderr)
+    command = [
+        "podman", "exec", "lemonldapng-app", "/usr/share/lemonldap-ng/bin/lemonldap-ng-cli",
+        "-yes", "1", "set", "saml.entityID", "https://"+entity_id+"/saml/metadata"
+        ]
+    subprocess.run(command, stderr=subprocess.DEVNULL, check=True)
+
+    # Configure the Identity Provider (IdP) (url)
+    print("Setting Identity Provider (IdP) URL", file=sys.stderr)
+    command = [
+        "podman", "exec", "lemonldapng-app", "/usr/share/lemonldap-ng/bin/lemonldap-ng-cli",
+        "-yes", "1", "set", "saml.idpMetadataURL", "https://"+identity_provider+"/metadata"
+        ]
+    subprocess.run(command, stderr=subprocess.DEVNULL, check=True)
+
+    # Configure Assertion Consumer Service (ACS)
+    print("Setting Assertion Consumer Service (ACS)", file=sys.stderr)
+    command = [
+        "podman", "exec", "lemonldapng-app", "/usr/share/lemonldap-ng/bin/lemonldap-ng-cli",
+        "-yes", "1", "set", "saml.acs", "https://"+identity_provider+"/saml/acs"
+        ]
+    subprocess.run(command, stderr=subprocess.DEVNULL, check=True)
+
+    # Configure the SAML Single Logout (SLO) if enabled
+    if saml_slo == "1":
+        print("SAML SLO is enabled, setting SAML SLO settings", file=sys.stderr)
+        command = [
+            "podman", "exec", "lemonldapng-app", "/usr/share/lemonldap-ng/bin/lemonldap-ng-cli",
+            "-yes", "1", "set", "saml.slo", "https://"+identity_provider+"/saml/slo"
+            ]
+        subprocess.run(command, stderr=subprocess.DEVNULL, check=True)
+    else:
+        print("SAML SLO is disabled", file=sys.stderr)
+        command = [
+            "podman", "exec", "lemonldapng-app", "/usr/share/lemonldap-ng/bin/lemonldap-ng-cli",
+            "-yes", "1", "set", "saml.slo", ""
+            ]
+        subprocess.run(command, stderr=subprocess.DEVNULL, check=True)
