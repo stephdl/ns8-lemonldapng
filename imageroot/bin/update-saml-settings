@@ -9,7 +9,7 @@ import os
 import subprocess
 
 # does saml is enabled in the UI (default is disabled)
-saml_status = os.getenv("SAML_STATUS", "0")
+saml_status = os.getenv("SAML_STATUS", "False") == "True"
 # read from the UI the entityID
 entity_id = os.getenv("SAML_ENTITY_ID", "")
 # read from the UI the identity provider
@@ -17,11 +17,11 @@ identity_provider = os.getenv("SAML_IDENTITY_PROVIDER", "")
 # read from the UI the Assertion Consumer Service
 assertion_consumer_service = os.getenv("SAML_ASSERTION_CONSUMER_SERVICE", "")
 # read from the UI enable SAML Single Logout (SLO)
-saml_slo = os.getenv("SAML_SLO_STATUS", "0")
+saml_slo = os.getenv("SAML_SLO_STATUS", "False") == "True"
 
 
 # SAML settings is disabled
-if saml_status == "0":
+if not saml_status:
     print("SAML is disabled, skipping SAML settings", file=sys.stderr)
     command = [
         "podman", "exec", "lemonldapng-app", "/usr/share/lemonldap-ng/bin/lemonldap-ng-cli",
@@ -77,7 +77,7 @@ else:
     subprocess.run(command, stderr=subprocess.DEVNULL, check=True)
 
     # Configure the SAML Single Logout (SLO) if enabled
-    if saml_slo == "1":
+    if not saml_slo:
         print("SAML SLO is enabled, setting SAML SLO settings", file=sys.stderr)
         command = [
             "podman", "exec", "lemonldapng-app", "/usr/share/lemonldap-ng/bin/lemonldap-ng-cli",
