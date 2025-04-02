@@ -9,15 +9,15 @@ import os
 import subprocess
 
 # does saml is enabled in the UI (default is disabled)
-saml_status = os.getenv("SAML_STATUS", "False") == "True"
+saml_status = os.getenv("SAML_STATUS", "False") == "True" # make boolean
 # read from the UI the entityID
-entity_id = os.getenv("SAML_ENTITY_ID", "")
+entity_id = os.getenv("SAML_ENTITY_ID", "") # default is empty ""
 # read from the UI the identity provider
-identity_provider = os.getenv("SAML_IDENTITY_PROVIDER", "")
+identity_provider = os.getenv("SAML_IDENTITY_PROVIDER", "") # default is empty ""
 # read from the UI the Assertion Consumer Service
-assertion_consumer_service = os.getenv("SAML_ASSERTION_CONSUMER_SERVICE", "")
+assertion_consumer_service = os.getenv("SAML_ASSERTION_CONSUMER_SERVICE", "") # default is empty ""
 # read from the UI enable SAML Single Logout (SLO)
-saml_slo = os.getenv("SAML_SLO_STATUS", "False") == "True"
+saml_slo = os.getenv("SAML_SLO_STATUS", "False") == "True" # make boolean
 
 
 # SAML settings is disabled
