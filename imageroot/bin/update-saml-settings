@@ -77,7 +77,7 @@ else:
     subprocess.run(command, stderr=subprocess.DEVNULL, check=True)
 
     # Configure the SAML Single Logout (SLO) if enabled
-    if not saml_slo:
+    if saml_slo:
         print("SAML SLO is enabled, setting SAML SLO settings", file=sys.stderr)
         command = [
             "podman", "exec", "lemonldapng-app", "/usr/share/lemonldap-ng/bin/lemonldap-ng-cli",
