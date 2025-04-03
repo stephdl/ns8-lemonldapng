@@ -9,6 +9,8 @@
             "http2https": true,
             "lets_encrypt": true,
             "ldap_domain": "domain.org",
+            "CDA": "true",
+            "saml": "true",
             "configured": true
         }
     ],
@@ -18,6 +20,8 @@
         "http2https",
         "lets_encrypt",
         "ldap_domain",
+        "cda",
+        "saml",
         "configured"
     ],
     "properties": {
@@ -40,6 +44,16 @@
             "type": "string",
             "title": "LDAP domain",
             "description": "Choose the LDAP domain to authenticate users"
+        },
+        "cda": {
+            "type": "boolean",
+            "title": "Cross Domain Authentication",
+            "description": "Request CDA activation"
+        },
+        "saml": {
+            "type": "boolean",
+            "title": "SAML",
+            "description": "Request SAML activation"
         },
         "configured": {
             "type": "boolean",
