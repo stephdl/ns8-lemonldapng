@@ -1,0 +1,47 @@
+#!/usr/bin/env python3
+
+#
+# Copyright (C) 2025 Nethesis S.r.l.
+# SPDX-License-Identifier: GPL-3.0-or-later
+#
+
+import sys
+import subprocess
+
+def get_saml_status():
+    result = subprocess.run([
+        "podman", "exec", "lemonldapng-app", "/usr/share/lemonldap-ng/bin/lemonldap-ng-cli",
+        "-yes", "1", "get", "issuerDBSAMLActivation"
+    ], capture_output=True, text=True, check=True)
+    return result.stdout.strip()
+
+def get_saml_entity_id():
+    result = subprocess.run([
+        "podman", "exec", "lemonldapng-app", "/usr/share/lemonldap-ng/bin/lemonldap-ng-cli",
+        "-yes", "1", "get", "samlEntityID"
+    ], capture_output=True, text=True, check=True)
+    return result.stdout.strip()
+
+def set_saml_status(value):
+    subprocess.run([
+        "podman", "exec", "lemonldapng-app", "/usr/share/lemonldap-ng/bin/lemonldap-ng-cli",
+        "-yes", "1", "set", "issuerDBSAMLActivation", str(value)
+    ], check=True)
+
+def set_saml_entity_id():
+    subprocess.run([
+        "podman", "exec", "lemonldapng-app", "/usr/share/lemonldap-ng/bin/lemonldap-ng-cli",
+        "-yes", "1", "set", "samlEntityID", "#PORTAL#/saml/metadata"
+    ], check=True)
+
+def main():
+    saml_status = get_saml_status()
+    if saml_status == "issuerDBSAMLActivation = 0":
+        print("SAML is disabled, skipping SAML settings", file=sys.stderr)
+        set_saml_status(0)
+    else:
+        print("SAML is enabled, setting SAML settings", file=sys.stderr)
+        print("Enabling SAML settings", file=sys.stderr)
+        set_saml_status(1)
+        print("Setting SAML Entity ID", file=sys.stderr)
+        set_saml_entity_id()
