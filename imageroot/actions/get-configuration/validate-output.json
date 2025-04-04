@@ -9,7 +9,9 @@
             "http2https": true,
             "lets_encrypt": true,
             "ldap_domain": "domain.org",
-            "configured": true
+            "configured": true,
+            "cda_status": true,
+            "saml_status": true
         }
     ],
     "type": "object",
@@ -18,7 +20,9 @@
         "http2https",
         "lets_encrypt",
         "ldap_domain",
-        "configured"
+        "configured",
+        "cda_status",
+        "saml_status"
     ],
     "properties": {
         "host": {
@@ -45,6 +49,16 @@
             "type": "boolean",
             "title": "Configured",
             "description": "True if the application is already configured"
+        },
+        "cda_status": {
+            "type": "boolean",
+            "title": "CDA",
+            "description": "True if the application is configured to use CDA"
+        },
+        "saml_status": {
+            "type": "boolean",
+            "title": "IssuerDB SAML Activation",
+            "description": "True if the application is configured to use IssuerDB SAML"
         }
     }
 }
