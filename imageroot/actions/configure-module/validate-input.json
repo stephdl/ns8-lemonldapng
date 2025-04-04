@@ -8,7 +8,9 @@
             "host": "lemonldapng.domain.org",
             "http2https": true,
             "lets_encrypt": true,
-            "ldap_domain": "domain.org"
+            "ldap_domain": "domain.org",
+            "cda_status": true,
+            "saml_status": true
         }
     ],
     "type": "object",
@@ -16,7 +18,9 @@
         "host",
         "http2https",
         "lets_encrypt",
-        "ldap_domain"
+        "ldap_domain",
+        "cda_status",
+        "saml_status"
     ],
     "properties": {
         "host": {
@@ -41,6 +45,16 @@
             "description": "Choose the LDAP domain to authenticate users",
             "format": "hostname",
             "pattern": "\\."
+        },
+        "cda_status": {
+            "type": "boolean",
+            "title": "CDA",
+            "description": "True if the application is configured to use CDA"
+        },
+        "saml_status": {
+            "type": "boolean",
+            "title": "SAML",
+            "description": "True if the application is configured to use SAML"
         }
     }
 }
