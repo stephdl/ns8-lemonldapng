@@ -39,42 +39,46 @@ for key in lp.get_domains_list():
 config['ldap_domain_list'] = domains
 config['ldap_domain'] = os.environ.get("LDAP_DOMAIN",'')
 
-# retrieve the cross domain authentication value
-command = [
+# Check if the lemonldapng service is active
+command = ["systemctl", "is-active", "--user", "lemonldapng"]
+try:
+    result = subprocess.run(command, stdout=subprocess.PIPE, stderr=subprocess.DEVNULL, text=True, check=True)
+    service_status = result.stdout.strip()
+except subprocess.CalledProcessError:
+    service_status = "inactive"
+
+if service_status != "active":
+    # Set default values if the service is not active
+    config['cda_status'] = False
+    config['saml_entity_id'] = ""
+    config['saml_status'] = False
+else:
+    # retrieve the cross domain authentication value
+    command = [
         "podman", "exec", "lemonldapng-app",
-        "/usr/share/lemonldap-ng/bin/lemonldap-ng-cli", "-yes", "1", "get","cda"
-        ]
+        "/usr/share/lemonldap-ng/bin/lemonldap-ng-cli", "-yes", "1", "get", "cda"
+    ]
+    result = subprocess.run(command, stderr=subprocess.DEVNULL, stdout=subprocess.PIPE, text=True, check=True)
+    output = result.stdout.strip()
+    config['cda_status'] = True if output == 'cda = 1' else False
 
-# Run the command and capture the output
-result = subprocess.run(command, stderr=subprocess.DEVNULL, stdout=subprocess.PIPE, text=True, check=True)
-
-# Process the output and remove \n
-output = result.stdout.strip()
-config['cda_status'] = True if output == 'cda = 1' else False
-
-# retrieve the samlEntityID value
-command = [
+    # retrieve the samlEntityID value
+    command = [
         "podman", "exec", "lemonldapng-app",
-        "/usr/share/lemonldap-ng/bin/lemonldap-ng-cli", "-yes", "1", "get","samlEntityID"
-        ]
-# Run the command and capture the output
-result = subprocess.run(command, stderr=subprocess.DEVNULL, stdout=subprocess.PIPE, text=True, check=True)
+        "/usr/share/lemonldap-ng/bin/lemonldap-ng-cli", "-yes", "1", "get", "samlEntityID"
+    ]
+    result = subprocess.run(command, stderr=subprocess.DEVNULL, stdout=subprocess.PIPE, text=True, check=True)
+    output = result.stdout.strip().replace("samlEntityID = ", "")
+    config['saml_entity_id'] = output or ""
 
-# Process the output and remove the prefix "samlEntityID = "
-output = result.stdout.strip().replace("samlEntityID = ", "")
-config['saml_entity_id'] = output or ""
-
-# retrieve the issuerDBSAMLActivation value
-command = [
+    # retrieve the issuerDBSAMLActivation value
+    command = [
         "podman", "exec", "lemonldapng-app",
-        "/usr/share/lemonldap-ng/bin/lemonldap-ng-cli", "-yes", "1", "get","issuerDBSAMLActivation"
-        ]
-# Run the command and capture the output
-result = subprocess.run(command, stderr=subprocess.DEVNULL, stdout=subprocess.PIPE, text=True, check=True)
-
-# Process the output and remove \n
-output = result.stdout.strip()
-config['saml_status'] = True if output == 'issuerDBSAMLActivation = 1' else False
+        "/usr/share/lemonldap-ng/bin/lemonldap-ng-cli", "-yes", "1", "get", "issuerDBSAMLActivation"
+    ]
+    result = subprocess.run(command, stderr=subprocess.DEVNULL, stdout=subprocess.PIPE, text=True, check=True)
+    output = result.stdout.strip()
+    config['saml_status'] = True if output == 'issuerDBSAMLActivation = 1' else False
 
 # Dump the configuration to stdout
 json.dump(config, fp=sys.stdout)
