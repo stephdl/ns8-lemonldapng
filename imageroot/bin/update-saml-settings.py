@@ -1,0 +1,35 @@
+#!/usr/bin/env python3
+
+#
+# Copyright (C) 2025 Nethesis S.r.l.
+# SPDX-License-Identifier: GPL-3.0-or-later
+#
+import sys
+import os
+import subprocess
+
+# does saml is enabled in the UI (default is disabled)
+saml_status = os.getenv("SAML_STATUS", "False") == "True" # make boolean
+
+
+# SAML settings is disabled
+if not saml_status:
+    print("SAML is disabled, skipping SAML settings", file=sys.stderr)
+
+    # Disable the SAML Protocol
+    command = [
+        "podman", "exec", "lemonldapng-app", "/usr/share/lemonldap-ng/bin/lemonldap-ng-cli",
+        "-yes", "1", "set", "issuerDBSAMLActivation", "0"
+        ]
+    subprocess.run(command, stderr=subprocess.DEVNULL, check=True)
+
+else:
+    print("SAML is enabled, setting SAML settings", file=sys.stderr)
+    
+    # Enable the SAML Protocol
+    print("Enabling SAML settings", file=sys.stderr)
+    command = [
+        "podman", "exec", "lemonldapng-app", "/usr/share/lemonldap-ng/bin/lemonldap-ng-cli",
+        "-yes", "1", "set", "issuerDBSAMLActivation", "1"
+        ]
+    subprocess.run(command, stderr=subprocess.DEVNULL, check=True)
