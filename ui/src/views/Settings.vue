@@ -95,7 +95,48 @@
             <cv-accordion ref="accordion" class="maxwidth mg-bottom">
               <cv-accordion-item :open="toggleAccordion[0]">
                 <template slot="title">{{ $t("settings.advanced") }}</template>
-                <template slot="content"> </template>
+                <template slot="content">
+                  <NsToggle
+                    v-model="saml_status"
+                    ref="saml_status"
+                    :label="$t('settings.saml_status')"
+                    :form-item="true"
+                    value="toggleValue"
+                    :disabled="
+                      loading.getConfiguration || loading.configureModule
+                    "
+                  >
+                    <template slot="tooltip">
+                      <span>{{ $t("settings.saml_status_tooltip") }}</span>
+                    </template>
+                    <template slot="text-left"
+                      >{{ $t("settings.disabled") }}
+                    </template>
+                    <template slot="text-right"
+                      >{{ $t("settings.enabled") }}
+                    </template>
+                  </NsToggle>
+                  <NsToggle
+                    v-model="cda_status"
+                    ref="cda_status"
+                    :label="$t('settings.cda_status')"
+                    :form-item="true"
+                    value="toggleValue"
+                    :disabled="
+                      loading.getConfiguration || loading.configureModule
+                    "
+                  >
+                    <template slot="tooltip">
+                      <span>{{ $t("settings.cda_status_tooltip") }}</span>
+                    </template>
+                    <template slot="text-left"
+                      >{{ $t("settings.disabled") }}
+                    </template>
+                    <template slot="text-right"
+                      >{{ $t("settings.enabled") }}
+                    </template>
+                  </NsToggle>
+                </template>
               </cv-accordion-item>
             </cv-accordion>
             <cv-row v-if="error.configureModule">
@@ -150,6 +191,8 @@ export default {
       q: {
         page: "settings",
       },
+      saml_status: false,
+      cda_status: false,
       urlCheckInterval: null,
       host: "",
       configured: false,
@@ -235,6 +278,8 @@ export default {
       this.isLetsEncryptEnabled = config.lets_encrypt;
       this.isHttpToHttpsEnabled = config.http2https;
       this.configured = config.configured;
+      this.saml_status = config.saml_status;
+      this.cda_status = config.cda_status;
       // force to reload value after dom update
       this.$nextTick(() => {
         this.ldap_domain = config.ldap_domain;
@@ -320,6 +365,8 @@ export default {
             lets_encrypt: this.isLetsEncryptEnabled,
             http2https: this.isHttpToHttpsEnabled,
             ldap_domain: this.ldap_domain == "-" ? "" : this.ldap_domain,
+            saml_status: this.saml_status,
+            cda_status: this.cda_status,
           },
           extra: {
             title: this.$t("settings.instance_configuration", {
