@@ -15,6 +15,7 @@ import json
 import agent
 from agent.ldapproxy import Ldapproxy
 import subprocess
+import time
 
 # Prepare return variable
 config = {}
@@ -52,6 +53,28 @@ if service_status != "active":
     config['cda_status'] = False
     config['saml_status'] = False
 else:
+    # Wait for the  lemonldapng-app command to succeed (timeout: 30 seconds)
+    timeout = 30  # seconds
+    interval = 1  # seconds between retries
+    elapsed_time = 0
+
+    # Check if lemonldapng-app is running
+    while elapsed_time < timeout:
+        command = ["systemctl", "is-active", "--user", "lemonldapng-app"]
+        try:
+            result = subprocess.run(command, stderr=subprocess.DEVNULL, stdout=subprocess.PIPE, text=True, check=True)
+            output = result.stdout.strip()
+            if output == 'active':  # If the command succeeds and returns output, break the loop
+                break
+        except subprocess.CalledProcessError:
+            # Print a message to stderr and wait before retrying
+            print("Waiting for lemonldapng-app to become available...", file=sys.stderr)
+            time.sleep(interval)
+            elapsed_time += interval
+            if elapsed_time >= timeout:
+                print("Timout is reached. lemonldapng-app is not available.", file=sys.stderr)
+                # Exit with an error code   
+                sys.exit(1)
     # retrieve the cross domain authentication value
     command = [
         "podman", "exec", "lemonldapng-app",
