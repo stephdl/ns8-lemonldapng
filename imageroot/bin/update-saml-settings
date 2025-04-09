@@ -40,5 +40,6 @@ else:
         "issuerDBSAMLPath", "^/saml/",
         "samlServicePrivateKeySig", saml_key,
         "samlServicePublicKeySig", saml_pem,
+        "samlEntityID", "https://"+os.environ["TRAEFIK_HOST"]+"/saml/metadata",
         ]
     subprocess.run(command, stderr=subprocess.DEVNULL, check=True)
