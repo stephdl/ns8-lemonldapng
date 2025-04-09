@@ -25,11 +25,20 @@ if not saml_status:
 
 else:
     print("SAML is enabled, setting SAML settings", file=sys.stderr)
-    
+    # read saml key and cert from files certificates/saml.key and certificates/saml.pem
+    with open("certificates/saml.key", "r") as key_file:
+        saml_key = key_file.read()
+    with open("certificates/saml.pem", "r") as pem_file:
+        saml_pem = pem_file.read()
+
     # Enable the SAML Protocol
     print("Enabling SAML settings", file=sys.stderr)
     command = [
         "podman", "exec", "lemonldapng-app", "/usr/share/lemonldap-ng/bin/lemonldap-ng-cli",
-        "-yes", "1", "set", "issuerDBSAMLActivation", "1"
+        "-yes", "1", "set",
+        "issuerDBSAMLActivation", "1",
+        "issuerDBSAMLPath", "^/saml/",
+        "samlServicePrivateKeySig", saml_key,
+        "samlServicePublicKeySig", saml_pem,
         ]
     subprocess.run(command, stderr=subprocess.DEVNULL, check=True)
