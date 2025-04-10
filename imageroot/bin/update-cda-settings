@@ -18,7 +18,8 @@ if not cda_status:
     # Disable the CDA flag
     command = [
         "podman", "exec", "lemonldapng-app", "/usr/share/lemonldap-ng/bin/lemonldap-ng-cli",
-        "-yes", "1", "set", "cda", "0"
+        "-yes", "1", "set", "cda", "0",
+        "securedCookie", "0"
         ]
     subprocess.run(command, stderr=subprocess.DEVNULL, check=True)
 
@@ -29,6 +30,7 @@ else:
     print("Enabling CDA settings", file=sys.stderr)
     command = [
         "podman", "exec", "lemonldapng-app", "/usr/share/lemonldap-ng/bin/lemonldap-ng-cli",
-        "-yes", "1", "set", "cda", "1"
+        "-yes", "1", "set", "cda", "1",
+        "securedCookie", "1"
         ]
     subprocess.run(command, stderr=subprocess.DEVNULL, check=True)
