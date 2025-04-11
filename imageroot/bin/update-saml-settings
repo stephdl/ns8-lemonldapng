@@ -18,8 +18,9 @@ if not saml_status:
 
     # Disable the SAML Protocol
     command = [
-        "podman", "exec", "lemonldapng-app", "/usr/share/lemonldap-ng/bin/lemonldap-ng-cli",
-        "-yes", "1", "set", "issuerDBSAMLActivation", "0"
+        "podman", "exec", "lemonldapng-app",
+        "/usr/share/lemonldap-ng/bin/lemonldap-ng-cli", "-yes", "1", "set",
+        "issuerDBSAMLActivation", "0"
         ]
     subprocess.run(command, stderr=subprocess.DEVNULL, check=True)
 
