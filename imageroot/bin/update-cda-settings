@@ -9,30 +9,50 @@ import os
 import subprocess
 
 # does CDA is enabled in the UI (default is disabled)
-cda_status = os.getenv("CDA_STATUS", "False") == "True" # make boolean
+cda_status = os.getenv("CDA_STATUS", "False") == "True"  # make boolean
 
-# CDA settings is disabled
+def get_portal_url(switch_to_https=False):
+    """Fetch the current portal URL and adjust the scheme if needed."""
+    result = subprocess.run(
+        [
+            "podman", "exec", "lemonldapng-app",
+            "/usr/share/lemonldap-ng/bin/lemonldap-ng-cli", "-yes", "1", "get", "portal"
+        ],
+        capture_output=True, text=True, check=True
+    )
+    url = result.stdout.strip().replace("portal = ", "")
+    if switch_to_https:
+        url = url.replace("http:", "https:")
+    else:
+        url = url.replace("https:", "http:")
+    return url
+
 if not cda_status:
     print("CDA is disabled, skipping CDA settings", file=sys.stderr)
 
-    # Disable the CDA flag
+    # Disable the CDA flag and force http
+    portal_url = get_portal_url(switch_to_https=False)
+
     command = [
         "podman", "exec", "lemonldapng-app",
         "/usr/share/lemonldap-ng/bin/lemonldap-ng-cli", "-yes", "1", "set",
         "cda", "0",
-        "securedCookie", "0"
-        ]
+        "securedCookie", "0",
+        "portal", portal_url
+    ]
     subprocess.run(command, stderr=subprocess.DEVNULL, check=True)
 
 else:
     print("CDA is enabled, setting CDA settings", file=sys.stderr)
-    
-    # Enable the CDA flag
-    print("Enabling CDA settings", file=sys.stderr)
+
+    # Enable the CDA flag and force https
+    portal_url = get_portal_url(switch_to_https=True)
+
     command = [
         "podman", "exec", "lemonldapng-app",
         "/usr/share/lemonldap-ng/bin/lemonldap-ng-cli", "-yes", "1", "set",
         "cda", "1",
-        "securedCookie", "1"
-        ]
+        "securedCookie", "1",
+        "portal", portal_url
+    ]
     subprocess.run(command, stderr=subprocess.DEVNULL, check=True)
