@@ -10,7 +10,6 @@ import subprocess
 
 # does CDA is enabled in the UI (default is disabled)
 cda_status = os.getenv("CDA_STATUS", "False") == "True"  # make boolean
-
 def get_portal_url(switch_to_https=False):
     """Fetch the current portal URL and adjust the scheme if needed."""
     result = subprocess.run(
