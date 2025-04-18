@@ -34,7 +34,11 @@ buildah run \
 # Add imageroot directory to the container image
 buildah add "${container}" imageroot /imageroot
 buildah add "${container}" ui/dist /ui
-
+# Add custom image files and css (e.g., logos/icons and background for the portal)
+buildah add "${container}" assets/css/custom.css /usr/share/lemonldap-ng/portal/htdocs/static/bootstrap/css
+buildah add "${container}" assets/background/nethbackground.png /usr/share/lemonldap-ng/portal/htdocs/static/common/backgrounds
+buildah add "${container}" assets/logo/nethserver.png /usr/share/lemonldap-ng/portal/htdocs/static/CustomTheme
+buildah add "${container}" assets/apps /usr/share/lemonldap-ng/portal/htdocs/static/common/apps
 buildah config --entrypoint=/ \
     --label="org.nethserver.authorizations=traefik@node:routeadm cluster:accountconsumer" \
     --label="org.nethserver.tcp-ports-demand=1" \
