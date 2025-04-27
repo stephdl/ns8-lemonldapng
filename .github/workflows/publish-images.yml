@@ -2,11 +2,31 @@ name: "Publish images"
 
 on:
   push:
+    # Specify the branches or paths you want to trigger the workflow on
+    branches:
+      - main
+    # Or, if you want to trigger on all branches or a specific path, add:
+    # paths:
+    #   - 'path/to/specific/files/*'
 
 permissions:
-  packages: write
+  packages: write  # This grants the workflow write access to GitHub packages
 
 jobs:
   publish-images:
-    if: github.run_number > 1
-    uses: NethServer/ns8-github-actions/.github/workflows/publish-branch.yml@v1
+    if: github.run_number > 1  # Only run if this is not the first run
+
+    runs-on: ubuntu-latest  # Specify the environment for this job
+
+    steps:
+      # Checkout the code from the repository
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      # Reuse the publish-branch.yml from the specified repository
+      - name: Publish branch images
+        uses: NethServer/ns8-github-actions/.github/workflows/publish-branch.yml@v1
+        with:
+          # You can pass custom parameters to the reused workflow here
+          # For example:
+          # param_name: value
