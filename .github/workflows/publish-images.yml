@@ -14,8 +14,3 @@ jobs:
     if: github.run_number > 1  # Only run if this is not the first run
 
     uses: NethServer/ns8-github-actions/.github/workflows/publish-branch.yml@v1  # Reuse the workflow at the top level
-
-    with:
-      # You can pass parameters to the reusable workflow here, if needed
-      # Example:
-      # param_name: value
