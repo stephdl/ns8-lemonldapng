@@ -2,15 +2,11 @@ name: "Publish images"
 
 on:
   push:
-    branches:
-      - main  # Specify the branch or branches you want to trigger this workflow
-  workflow_dispatch:  # This enables manual triggering of the workflow
 
 permissions:
-  packages: write  # Grant write access to GitHub packages
+  packages: write
 
 jobs:
   publish-images:
-    if: github.run_number > 1  # Only run if this is not the first run
-
-    uses: NethServer/ns8-github-actions/.github/workflows/publish-branch.yml@v1  # Reuse the workflow at the top level
+    if: github.run_number > 1
+    uses: NethServer/ns8-github-actions/.github/workflows/publish-branch.yml@v1
