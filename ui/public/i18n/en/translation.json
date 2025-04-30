@@ -48,6 +48,8 @@
     "cda_status": "CDA status",
     "cda_status_tooltip": "CDA (Cross Domain Authentication) is a mechanism that allows Single Sign-On (SSO) across different domains. It works by securely sharing authentication information between portals using redirection and encrypted tokens, enabling seamless access across multiple web domains.",
     "ldap_domain_format": "Must be a valid LDAP domain name"
+    "sample_apps_enabled": "Sample apps",
+    "sample_apps_enabled_tooltip": "Enable or disable the sample applications for demonstration and testing purposes."
   },
   "about": {
     "title": "About"
