@@ -26,31 +26,38 @@ def get_domain():
 if apps_enabled:
     print("Sample apps are enabled. Creating entries...", file=sys.stderr)
     domain = get_domain()
-    command = [
+    
+    # Create category
+    subprocess.run([
         "podman", "exec", "lemonldapng-app",
         "/usr/share/lemonldap-ng/bin/lemonldap-ng-cli", "-yes", "1", "set",
-
-        # Category
         "applicationList/1sample/type", "category",
-        "applicationList/1sample/catname", "Sample applications",
-
-        # test1
+        "applicationList/1sample/catname", "Sample applications"
+    ], check=True)
+    
+    # Create test1 application
+    subprocess.run([
+        "podman", "exec", "lemonldapng-app",
+        "/usr/share/lemonldap-ng/bin/lemonldap-ng-cli", "-yes", "1", "set",
         "applicationList/1sample/test1/type", "application",
         "applicationList/1sample/test1/options/name", "Application Test 1",
         "applicationList/1sample/test1/options/description", "A simple application displaying authenticated user",
         "applicationList/1sample/test1/options/display", "auto",
         "applicationList/1sample/test1/options/logo", "demo.png",
-        "applicationList/1sample/test1/options/uri", f"http://test1.{domain}",
-
-        # test2
+        "applicationList/1sample/test1/options/uri", f"http://test1.{domain}"
+    ], check=True)
+    
+    # Create test2 application
+    subprocess.run([
+        "podman", "exec", "lemonldapng-app",
+        "/usr/share/lemonldap-ng/bin/lemonldap-ng-cli", "-yes", "1", "set",
         "applicationList/1sample/test2/type", "application",
         "applicationList/1sample/test2/options/name", "Application Test 2",
         "applicationList/1sample/test2/options/description", "The same simple application displaying authenticated user",
         "applicationList/1sample/test2/options/display", "auto",
         "applicationList/1sample/test2/options/logo", "thumbnail.png",
         "applicationList/1sample/test2/options/uri", f"http://test2.{domain}/"
-    ]
-    subprocess.run(command, check=True)
+    ], check=True)
 
 else:
     print("Sample apps are disabled. Removing entries...", file=sys.stderr)
