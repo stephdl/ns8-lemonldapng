@@ -13,6 +13,7 @@ command = [
     "portalMainLogo", "CustomTheme/nethserver.png",
     "portalCustomCss", "CustomTheme/custom.css",
     "portalFavicon", "CustomTheme/favicon.ico",
+    "portalSkinBackground", "nethbackground.png",
     "portalDisplayRegister", "0"
 ]
 
