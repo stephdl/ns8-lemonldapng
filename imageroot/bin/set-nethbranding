@@ -12,7 +12,8 @@ command = [
     "/usr/share/lemonldap-ng/bin/lemonldap-ng-cli", "-yes", "1", "set",
     "portalMainLogo", "CustomTheme/nethserver.png",
     "portalCustomCss", "CustomTheme/custom.css",
-    "portalFavicon", "CustomTheme/favicon.ico"
+    "portalFavicon", "CustomTheme/favicon.ico",
+    "portalDisplayRegister", "0"
 ]
 
 subprocess.run(command, check=True)
