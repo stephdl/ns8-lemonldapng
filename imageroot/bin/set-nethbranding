@@ -1,8 +1,18 @@
-#!/bin/bash
-set -e
+#!/usr/bin/env python3
 
-podman exec lemonldapng-app /usr/share/lemonldap-ng/bin/lemonldap-ng-cli -yes 1 \
-    set \
-        portalMainLogo 'CustomTheme/nethserver.png' \
-        portalCustomCss 'CustomTheme/custom.css' \
-        portalFavicon 'CustomTheme/favicon.ico'
+#
+# Copyright (C) 2025 Nethesis S.r.l.
+# SPDX-License-Identifier: GPL-3.0-or-later
+#
+
+import subprocess
+
+command = [
+    "podman", "exec", "lemonldapng-app",
+    "/usr/share/lemonldap-ng/bin/lemonldap-ng-cli", "-yes", "1", "set",
+    "portalMainLogo", "CustomTheme/nethserver.png",
+    "portalCustomCss", "CustomTheme/custom.css",
+    "portalFavicon", "CustomTheme/favicon.ico"
+]
+
+subprocess.run(command, check=True)
