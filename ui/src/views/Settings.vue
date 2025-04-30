@@ -97,6 +97,21 @@
                 <template slot="title">{{ $t("settings.advanced") }}</template>
                 <template slot="content">
                   <NsToggle
+                    v-model="sample_apps_enabled"
+                    ref="sample_apps_enabled"
+                    :label="$t('settings.sample_apps_enabled')"
+                    :form-item="true"
+                    value="toggleValue"
+                    :disabled="loading.getConfiguration || loading.configureModule"
+                  >
+                    <template slot="tooltip">
+                    <span>{{ $t("settings.sample_apps_enabled_tooltip") }}</span>
+                    </template>
+                    <template slot="text-left">{{ $t("settings.disabled") }}</template>
+                    <template slot="text-right">{{ $t("settings.enabled") }}</template>
+                    </NsToggle>
+
+                  <NsToggle
                     v-model="saml_status"
                     ref="saml_status"
                     :label="$t('settings.saml_status')"
@@ -193,6 +208,7 @@ export default {
       },
       saml_status: false,
       cda_status: false,
+      sample_apps_enabled: false,
       urlCheckInterval: null,
       host: "",
       configured: false,
@@ -232,6 +248,7 @@ export default {
   methods: {
     async getConfiguration() {
       this.loading.getConfiguration = true;
+      this.sample_apps_enabled = config.sample_apps_enabled;
       this.error.getConfiguration = "";
       const taskAction = "get-configuration";
       const eventId = this.getUuid();
@@ -367,6 +384,7 @@ export default {
             ldap_domain: this.ldap_domain == "-" ? "" : this.ldap_domain,
             saml_status: this.saml_status,
             cda_status: this.cda_status,
+            sample_apps_enabled: this.sample_apps_enabled,
           },
           extra: {
             title: this.$t("settings.instance_configuration", {
