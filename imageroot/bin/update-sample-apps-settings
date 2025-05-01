@@ -1,75 +1,54 @@
 #!/usr/bin/env python3
-
-#
-# Copyright (C) 2025 Nethesis S.r.l.
-# SPDX-License-Identifier: GPL-3.0-or-later
-#
-
-import os
 import subprocess
 import sys
 
-# Check whether sample apps should be enabled
-apps_enabled = os.getenv("SAMPLE_APPS_ENABLED", "False") == "True"
-
 def get_domain():
-    """Fetch the configured domain from LemonLDAP::NG."""
-    result = subprocess.run(
-        [
-            "podman", "exec", "lemonldapng-app",
-            "/usr/share/lemonldap-ng/bin/lemonldap-ng-cli", "-yes", "1", "get", "domain"
-        ],
-        capture_output=True, text=True, check=True
-    )
-    return result.stdout.strip().replace("domain = ", "")
+    try:
+        result = subprocess.run(
+            [
+                "podman", "exec", "lemonldapng-app",
+                "/usr/share/lemonldap-ng/bin/lemonldap-ng-cli", "-yes", "1", "get", "domain"
+            ],
+            check=True,
+            capture_output=True,
+            text=True
+        )
+        for line in result.stdout.splitlines():
+            if line.startswith("domain"):
+                return line.split("= ")[1].strip()
+    except subprocess.CalledProcessError as e:
+        print(f"Error retrieving domain: {e.stderr}", file=sys.stderr)
+        sys.exit(1)
 
-if apps_enabled:
-    print("Sample apps are enabled. Creating entries...", file=sys.stderr)
+def enable_sample_apps():
+    print("Sample apps are enabled. Creating category...", file=sys.stderr)
+    subprocess.run([
+        "podman", "exec", "lemonldapng-app",
+        "/usr/share/lemonldap-ng/bin/lemonldap-ng-cli", "-yes", "1",
+        "addKey", "applicationList/applications", "type", "category",
+        "applicationList/applications", "catname", "Sample applications"
+    ], check=True)
+
+def disable_sample_apps():
+    print("Sample apps are disabled. Removing category...", file=sys.stderr)
+    subprocess.run([
+        "podman", "exec", "lemonldapng-app",
+        "/usr/share/lemonldap-ng/bin/lemonldap-ng-cli", "-yes", "1",
+        "delKey", "applicationList", "1sample"
+    ], check=True)
+
+def main():
+    if len(sys.argv) != 2 or sys.argv[1] not in ("on", "off"):
+        print("Usage: toggle_sample_apps.py [on|off]", file=sys.stderr)
+        sys.exit(1)
+
     domain = get_domain()
-    
-    # Create category
-    subprocess.run([
-        "podman", "exec", "lemonldapng-app",
-        "/usr/share/lemonldap-ng/bin/lemonldap-ng-cli", "-yes", "1", "set",
-        "applicationList/1sample/type", "category",
-        "applicationList/1sample/catname", "Sample applications"
-    ], check=True)
-    
-    # Create test1 application
-    subprocess.run([
-        "podman", "exec", "lemonldapng-app",
-        "/usr/share/lemonldap-ng/bin/lemonldap-ng-cli", "-yes", "1", "set",
-        "applicationList/1sample/test1/type", "application",
-        "applicationList/1sample/test1/options/name", "Application Test 1",
-        "applicationList/1sample/test1/options/description", "A simple application displaying authenticated user",
-        "applicationList/1sample/test1/options/display", "auto",
-        "applicationList/1sample/test1/options/logo", "demo.png",
-        "applicationList/1sample/test1/options/uri", f"http://test1.{domain}"
-    ], check=True)
-    
-    # Create test2 application
-    subprocess.run([
-        "podman", "exec", "lemonldapng-app",
-        "/usr/share/lemonldap-ng/bin/lemonldap-ng-cli", "-yes", "1", "set",
-        "applicationList/1sample/test2/type", "application",
-        "applicationList/1sample/test2/options/name", "Application Test 2",
-        "applicationList/1sample/test2/options/description", "The same simple application displaying authenticated user",
-        "applicationList/1sample/test2/options/display", "auto",
-        "applicationList/1sample/test2/options/logo", "thumbnail.png",
-        "applicationList/1sample/test2/options/uri", f"http://test2.{domain}/"
-    ], check=True)
+    print(f"Detected LemonLDAP::NG domain: {domain}", file=sys.stderr)
 
-else:
-    print("Sample apps are disabled. Removing entries...", file=sys.stderr)
-    keys_to_delete = [
-        "applicationList/1sample/test1",
-        "applicationList/1sample/test2",
-        "applicationList/1sample/make",
-        "applicationList/1sample"  # This removes the entire category
-    ]
-    for key in keys_to_delete:
-        command = [
-            "podman", "exec", "lemonldapng-app",
-            "/usr/share/lemonldap-ng/bin/lemonldap-ng-cli", "-yes", "1", "delKey", key
-        ]
-        subprocess.run(command, check=True)
+    if sys.argv[1] == "on":
+        enable_sample_apps()
+    else:
+        disable_sample_apps()
+
+if __name__ == "__main__":
+    main()
