@@ -2,7 +2,7 @@
 
 ## Install
 
-Instantiate the module with:
+Initiate the module with:
 
     add-module ghcr.io/nethserver/lemonldapng:latest 1
 
