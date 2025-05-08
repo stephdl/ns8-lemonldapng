@@ -136,6 +136,26 @@
                       >{{ $t("settings.enabled") }}
                     </template>
                   </NsToggle>
+                  <NsToggle
+                    v-model="sample_apps_status"
+                    ref="sample_apps_status"
+                    :label="$t('settings.sample_apps_status')"
+                    :form-item="true"
+                    value="toggleValue"
+                    :disabled="
+                      loading.getConfiguration || loading.configureModule
+                    "
+                  >
+                    <template slot="tooltip">
+                      <span>{{ $t("settings.sample_apps_status_tooltip") }}</span>
+                    </template>
+                    <template slot="text-left"
+                      >{{ $t("settings.disabled") }}
+                    </template>
+                    <template slot="text-right"
+                      >{{ $t("settings.enabled") }}
+                    </template>
+                  </NsToggle>
                 </template>
               </cv-accordion-item>
             </cv-accordion>
@@ -193,6 +213,7 @@ export default {
       },
       saml_status: false,
       cda_status: false,
+      sample_apps_status: false, // Added toggle state
       urlCheckInterval: null,
       host: "",
       configured: false,
@@ -236,13 +257,10 @@ export default {
       const taskAction = "get-configuration";
       const eventId = this.getUuid();
 
-      // register to task error
       this.core.$root.$once(
         `${taskAction}-aborted-${eventId}`,
         this.getConfigurationAborted
       );
-
-      // register to task completion
       this.core.$root.$once(
         `${taskAction}-completed-${eventId}`,
         this.getConfigurationCompleted
@@ -280,7 +298,7 @@ export default {
       this.configured = config.configured;
       this.saml_status = config.saml_status;
       this.cda_status = config.cda_status;
-      // force to reload value after dom update
+      this.sample_apps_status = config.sample_apps_status; // assign config value
       this.$nextTick(() => {
         this.ldap_domain = config.ldap_domain;
         if (this.ldap_domain == "") {
@@ -293,22 +311,16 @@ export default {
     },
     validateConfigureModule() {
       this.clearErrors(this);
-
       let isValidationOk = true;
+
       if (!this.host) {
         this.error.host = "common.required";
-
-        if (isValidationOk) {
-          this.focusElement("host");
-        }
+        if (isValidationOk) this.focusElement("host");
         isValidationOk = false;
       }
       if (!this.ldap_domain) {
         this.error.ldap_domain = "common.required";
-
-        if (isValidationOk) {
-          this.focusElement("ldap_domain");
-        }
+        if (isValidationOk) this.focusElement("ldap_domain");
         isValidationOk = false;
       }
       return isValidationOk;
@@ -319,9 +331,7 @@ export default {
 
       for (const validationError of validationErrors) {
         const param = validationError.parameter;
-        // set i18n error message
         this.error[param] = this.$t("settings." + validationError.error);
-
         if (!focusAlreadySet) {
           this.focusElement(param);
           focusAlreadySet = true;
@@ -332,31 +342,25 @@ export default {
       this.error.test_imap = false;
       this.error.test_smtp = false;
       const isValidationOk = this.validateConfigureModule();
-      if (!isValidationOk) {
-        return;
-      }
+      if (!isValidationOk) return;
 
       this.loading.configureModule = true;
       const taskAction = "configure-module";
       const eventId = this.getUuid();
 
-      // register to task error
       this.core.$root.$once(
         `${taskAction}-aborted-${eventId}`,
         this.configureModuleAborted
       );
-
-      // register to task validation
       this.core.$root.$once(
         `${taskAction}-validation-failed-${eventId}`,
         this.configureModuleValidationFailed
       );
-
-      // register to task completion
       this.core.$root.$once(
         `${taskAction}-completed-${eventId}`,
         this.configureModuleCompleted
       );
+
       const res = await to(
         this.createModuleTaskForApp(this.instanceName, {
           action: taskAction,
@@ -367,6 +371,7 @@ export default {
             ldap_domain: this.ldap_domain == "-" ? "" : this.ldap_domain,
             saml_status: this.saml_status,
             cda_status: this.cda_status,
+            sample_apps_status: this.sample_apps_status, // included in submission
           },
           extra: {
             title: this.$t("settings.instance_configuration", {
@@ -393,8 +398,6 @@ export default {
     },
     configureModuleCompleted() {
       this.loading.configureModule = false;
-
-      // reload configuration
       this.getConfiguration();
     },
   },
@@ -406,7 +409,6 @@ export default {
 .mg-bottom {
   margin-bottom: $spacing-06;
 }
-
 .maxwidth {
   max-width: 38rem;
 }
