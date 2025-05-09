@@ -1,10 +1,16 @@
-#!/bin/bash
+#!/usr/bin/env python3
 
-# Bash script to delete sample applications from LemonLDAP-NG
+import subprocess
 
-set -e
+# Command to delete the '1sample' application category
+command = [
+    "podman", "exec", "lemonldapng-app",
+    "/usr/share/lemonldap-ng/bin/lemonldap-ng-cli", "-yes", "1",
+    "delKey", "applicationList/1sample"
+]
 
-podman exec lemonldapng-app /usr/share/lemonldap-ng/bin/lemonldap-ng-cli -yes 1 delKey \
-    applicationList/1sample/test1 \
-    applicationList/1sample/test2 \
-    applicationList/1sample
+try:
+    subprocess.run(command, check=True)
+    print("Sample application category deleted successfully.")
+except subprocess.CalledProcessError as e:
+    print(f"Error deleting sample app category: {e}")
