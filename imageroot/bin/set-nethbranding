@@ -13,25 +13,3 @@ set_command = [
     "portalDisplayRegister", "0"
 ]
 subprocess.run(set_command, check=True)
-
-# Delete sample apps
-delete_command = [
-    "podman", "exec", "lemonldapng-app",
-    "/usr/share/lemonldap-ng/bin/lemonldap-ng-cli", "-yes", "1", "delKey",
-    "applicationList/1sample/test1"
-]
-subprocess.run(delete_command, check=True)
-
-delete_command2 = [
-    "podman", "exec", "lemonldapng-app",
-    "/usr/share/lemonldap-ng/bin/lemonldap-ng-cli", "-yes", "1", "delKey",
-    "applicationList/1sample/test2"
-]
-subprocess.run(delete_command2, check=True)
-
-delete_category = [
-    "podman", "exec", "lemonldapng-app",
-    "/usr/share/lemonldap-ng/bin/lemonldap-ng-cli", "-yes", "1", "delKey",
-    "applicationList/1sample"
-]
-subprocess.run(delete_category, check=True)
