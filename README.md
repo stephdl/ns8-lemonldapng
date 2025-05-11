@@ -54,6 +54,7 @@ This is the available folders
 ├── register
 ├── template
 ├── theme
+├── backgrounds
 └── userdb
 ```
 
@@ -73,7 +74,7 @@ cd /etc/lemonldap-ng
 
 ## Configure
 
-Let's assume that the mattermost instance is named `lemonldapng1`.
+Let's assume that the lemonldapng instance is named `lemonldapng1`.
 
 Launch `configure-module`, by setting the following parameters:
 - `host`: a fully qualified domain name for the application
