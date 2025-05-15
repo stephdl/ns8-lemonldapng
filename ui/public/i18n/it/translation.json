@@ -42,7 +42,12 @@
     "choose_the_ldap_domain_to_authenticate_users": "Scegli il dominio LDAP per autenticare gli utenti",
     "choose_ldap_domain": "Scegli il dominio LDAP",
     "ldap_domain": "Dominio LDAP",
-    "lemonldapng_fqdn_tooltip": "Il nome host (FQDN) dell'applicazione web lemonldapng, può essere impostato solo una volta, usa l'interfaccia di lemonldapng per modificarlo"
+    "lemonldapng_fqdn_tooltip": "Il nome host (FQDN) dell'applicazione web lemonldapng può essere impostato solo una volta. Usa l'interfaccia lemonldapng per modificarlo.",
+    "saml_status": "Stato SAML",
+    "saml_status_tooltip": "SAML (Security Assertion Markup Language) è un protocollo che consente agli utenti di autenticarsi una sola volta e accedere a più servizi tramite Single Sign-On (SSO). Permette la federazione delle identità scambiando dati di autenticazione e autorizzazione tra un provider di identità (IdP) e i fornitori di servizi (SP) utilizzando messaggi in formato XML.",
+    "cda_status": "Stato CDA",
+    "cda_status_tooltip": "CDA (Autenticazione tra domini) è un meccanismo che consente il Single Sign-On (SSO) tra domini diversi. Funziona condividendo in modo sicuro le informazioni di autenticazione tra i portali tramite reindirizzamenti e token crittografati, permettendo un accesso continuo tra più domini web.",
+    "ldap_domain_format": "Deve essere un nome di dominio LDAP valido"
   },
   "about": {
     "title": "Informazioni"
