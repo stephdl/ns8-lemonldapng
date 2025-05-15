@@ -17,7 +17,7 @@ WorkingDirectory=%S/state
 Restart=always
 TimeoutStopSec=70
 ExecStartPre=/bin/rm -f %t/lemonldapng-app.pid %t/lemonldapng-app.ctr-id
-ExecStartPre=/bin/bash -c '/bin/mkdir -p ./llng/{theme,template,plugins,register,userdb,auth,captcha,menutab,apps}'
+ExecStartPre=/bin/bash -c '/bin/mkdir -p ./llng/{theme,template,plugins,register,userdb,auth,captcha,menutab,apps,backgrounds}'
 ExecStartPre=-runagent discover-smarthost
 ExecStartPre=/usr/local/bin/runagent discover-ldap
 ExecStart=/usr/bin/podman run --conmon-pidfile %t/lemonldapng-app.pid \
@@ -28,8 +28,6 @@ ExecStart=/usr/bin/podman run --conmon-pidfile %t/lemonldapng-app.pid \
         --env PORTAL_HOSTNAME=auth.${TRAEFIK_HOST} \
         --env MANAGER_HOSTNAME=manager.${TRAEFIK_HOST} \
         --env HANDLER_HOSTNAME=reload.${TRAEFIK_HOST} \
-        --env TEST1_HOSTNAME=test1.${TRAEFIK_HOST} \
-        --env TEST2_HOSTNAME=test2.${TRAEFIK_HOST} \
         --env PRESERVEFILES="/etc/lemonldap-ng /var/lib/lemonldap-ng/conf /var/lib/lemonldap-ng/sessions /var/lib/lemonldap-ng/psessions /usr/share/lemonldap-ng /etc/nginx/sites-enabled /usr/share/perl5/Lemonldap/NG/Portal/Plugins /usr/share/perl5/Lemonldap/NG/Portal/Register" \
         --env LOGLEVEL=error \
         --env FASTCGI_LISTEN_PORT=9000 \
@@ -48,11 +46,13 @@ ExecStart=/usr/bin/podman run --conmon-pidfile %t/lemonldapng-app.pid \
         --volume ./llng/captcha:/usr/share/perl5/Lemonldap/NG/Portal/Captcha/CustomCaptcha:Z \
         --volume ./llng/menutab:/usr/share/perl5/Lemonldap/NG/Portal/MenuTab/CustomMenuTab:Z \
         --volume ./llng/apps:/usr/share/lemonldap-ng/portal/htdocs/static/common/apps:Z \
+        --volume ./llng/backgrounds:/usr/share/lemonldap-ng/portal/htdocs/static/common/backgrounds:Z \
     ${LEMONLDAP_NG_IMAGE}
 ExecStartPost=/usr/local/bin/runagent update-smtp-settings
 ExecStartPost=/usr/local/bin/runagent update-ldap-settings
 ExecStartPost=/usr/local/bin/runagent update-cda-settings
 ExecStartPost=/usr/local/bin/runagent update-saml-settings
+ExecStartPost=/usr/local/bin/runagent set-nethbranding
 ExecStop=/usr/bin/podman stop --ignore --cidfile %t/lemonldapng-app.ctr-id -t 10
 ExecReload=/usr/bin/podman kill -s HUP lemonldapng-app
 SyslogIdentifier=%u
