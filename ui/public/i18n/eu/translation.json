@@ -30,19 +30,24 @@
     "save": "Gorde",
     "lemonldapng_fqdn": "lemonldapng host izena (FQDN)",
     "lets_encrypt": "Eskatu LE Ziurtagiria",
-    "http_to_https": "Forzatu HTTPS",
+    "http_to_https": "Behartu HTTPS",
     "enabled": "Aktibatuta",
     "disabled": "Desaktibatuta",
     "advanced": "Aurreratua",
     "configuring": "Konfiguratzen",
     "instance_configuration": "Konfiguratu lemonldapng",
-    "domain_already_used_in_traefik": "Domena Traefiken dagoeneko erabiltzen da",
+    "domain_already_used_in_traefik": "Domeinua dagoeneko erabilia Traefik-en",
     "host_pattern": "Izena izan behar du domeinu oso baliodun bat",
     "host_format": "Izena izan behar du domeinu oso baliodun bat",
     "choose_the_ldap_domain_to_authenticate_users": "Hautatu LDAP domeinua erabiltzaileak autentifikatzeko",
     "choose_ldap_domain": "Hautatu LDAP domeinua",
     "ldap_domain": "LDAP domeinua",
-    "lemonldapng_fqdn_tooltip": "lemonldapng web aplikazioaren host izena (FQDN), behin bakarrik ezar daiteke, aldatu nahi baduzu, erabili lemonldapng UI"
+    "lemonldapng_fqdn_tooltip": "lemonldapng web aplikazioaren host izena (FQDN), behin bakarrik ezar daiteke, aldaketak egiteko erabili lemonldapng UI",
+    "saml_status": "SAML egoera",
+    "saml_status_tooltip": "SAML (Security Assertion Markup Language) protokolo bat da, erabiltzaileei behin autentifikatzeko eta hainbat zerbitzutarako sarbidea izateko aukera ematen diena (SSO bidez). Identitateen federazioa ahalbidetzen du, identitate hornitzaile (IdP) eta zerbitzu hornitzaileen (SP) arteko autentifikazio eta baimen datuak XML bidez trukatuz.",
+    "cda_status": "CDA egoera",
+    "cda_status_tooltip": "CDA (Domeinu arteko autentifikazioa) mekanismo bat da, hainbat domeinuren arteko Single Sign-On (SSO) ahalbidetzen duena. Autentifikazio-informazioa modu seguruan partekatzen du birbideraketen eta zifratutako tokenen bidez, web-domeinu anitzetan sarbide jarraitua bermatuz.",
+    "ldap_domain_format": "LDAP domeinu baliodun bat izan behar du"
   },
   "about": {
     "title": "Buruz"
