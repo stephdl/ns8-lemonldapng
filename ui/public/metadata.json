@@ -6,14 +6,14 @@
   "categories": [],
   "authors": [
     {
-      "name": "Stephane de Labrusse",
-      "email": "stephdl@de-labrusse.fr"
+      "name": "KSAT Design",
+      "email": "support@ksatdesign.com.au"
     }
   ],
   "docs": {
     "documentation_url": "https://lemonldap-ng.org/documentation/latest/",
-    "bug_url": "https://github.com/stephdl/dev/issues",
-    "code_url": "https://github.com/stephdl/ns8-lemonldapng"
+    "bug_url": "https://github.com/ksat-design/dev/issues",
+    "code_url": "https://github.com/ksat-design/ns8-lemonldapng"
   },
   "source": "ghcr.io/nethserver/lemonldapng"
 }
